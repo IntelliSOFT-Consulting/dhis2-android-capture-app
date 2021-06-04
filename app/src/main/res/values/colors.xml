@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--DEFAULT THEME-->
-    <color name="colorPrimary">#215e8c</color>
-    <color name="colorPrimaryDark">#16507C</color>
+    <color name="colorPrimary">#6B2D7A</color>
+    <color name="colorPrimaryDark">#42164C</color>
     <color name="colorPrimaryLight">#BACFFF</color>
     <color name="colorAccent">#ffffff</color>
     <color name="colorAccentAlpha">#7fffffff</color>
