@@ -19,9 +19,9 @@
     <color name="colorPrimaryLightGreen">#8CDD8E</color>
 
     <!--ORANGE THEME-->
-    <color name="colorPrimaryOrange">#e95911</color>
-    <color name="colorPrimaryDarkOrange">#CF4500</color>
-    <color name="colorPrimaryLightOrange">#FFA77B</color>
+    <color name="colorPrimaryOrange">#c453e0</color>
+    <color name="colorPrimaryDarkOrange">#933BA8</color>
+    <color name="colorPrimaryLightOrange">#B97DC8</color>
 
     <color name="colorGreyDefault">#4d4d4d</color>x
     <color name="colorGreyDefaultPressed">#383838</color>

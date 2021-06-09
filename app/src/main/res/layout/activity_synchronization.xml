@@ -32,8 +32,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_dhis_white"
-            app:tint="@color/white" />
+            app:srcCompat="@drawable/ic_nacare_white"/>
 
         <ImageView
             android:id="@+id/logo_flag"
