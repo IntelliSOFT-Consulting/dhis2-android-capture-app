@@ -43,6 +43,8 @@ public class Constants {
     public static final int CAMERA_REQUEST = 108;
     public static final int GALLERY_REQUEST = 143;
 
+    public static final String HELP_DESK_URL = "https://nacareke.on.spiceworks.com/portal";
+
 
     // LOGIN
     public static final String ACCOUNT_RECOVERY = "/dhis-web-commons/security/recovery.action";

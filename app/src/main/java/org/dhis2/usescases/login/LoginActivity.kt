@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.SpannableString
@@ -48,14 +49,9 @@ import org.dhis2.usescases.login.auth.OpenIdProviders
 import org.dhis2.usescases.main.MainActivity
 import org.dhis2.usescases.qrScanner.ScanActivity
 import org.dhis2.usescases.sync.SyncActivity
-import org.dhis2.utils.Constants
+import org.dhis2.utils.*
 import org.dhis2.utils.Constants.ACCOUNT_RECOVERY
 import org.dhis2.utils.Constants.RQ_QR_SCANNER
-import org.dhis2.utils.D2ErrorUtils
-import org.dhis2.utils.NetworkUtils
-import org.dhis2.utils.OnDialogClickListener
-import org.dhis2.utils.TestingCredential
-import org.dhis2.utils.WebViewActivity
 import org.dhis2.utils.WebViewActivity.Companion.WEB_VIEW_URL
 import org.dhis2.utils.analytics.CLICK
 import org.dhis2.utils.analytics.FORGOT_CODE
@@ -452,6 +448,11 @@ class LoginActivity : ActivityGlobalAbstract(), LoginContracts.View {
         val intent = Intent(this, WebViewActivity::class.java)
         intent.putExtra(WEB_VIEW_URL, binding.serverUrlEdit.text.toString() + ACCOUNT_RECOVERY)
         startActivity(intent)
+    }
+
+    override fun openHelpDesk() {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(Constants.HELP_DESK_URL))
+        startActivity(browserIntent)
     }
 
     override fun navigateToQRActivity() {

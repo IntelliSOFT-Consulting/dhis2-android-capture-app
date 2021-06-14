@@ -1,7 +1,7 @@
 <resources>
     <!--GENERAL-->
-    <string name="app_name">Dhis2</string>
-    <string name="logo_text">dhis</string>
+    <string name="app_name">NaCaRe-Ke Capture</string>
+    <string name="logo_text">NaCaRe-Ke Capture</string>
     <string name="logo_number">2</string>
     <!-- Warnings and error messages -->
     <string name="error">خطأ</string>

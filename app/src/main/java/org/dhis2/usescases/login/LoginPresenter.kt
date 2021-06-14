@@ -407,6 +407,10 @@ class LoginPresenter(
         view.openAccountRecovery()
     }
 
+    fun onHelpDesk() {
+        view.openHelpDesk()
+    }
+
     fun getAutocompleteData(
         testingCredentials: List<TestingCredential>
     ): Pair<MutableList<String>, MutableList<String>> {

@@ -1,7 +1,7 @@
 <resources>
     <!--GENERAL-->
-    <string name="app_name">DHIS2</string>
-    <string name="logo_text">DHIS</string>
+    <string name="app_name">NaCaRe-Ke Capture</string>
+    <string name="logo_text">NaCaRe-Ke Capture</string>
     <string name="logo_number">2</string>
     <!-- Warnings and error messages -->
     <string name="error">Хатолик</string>

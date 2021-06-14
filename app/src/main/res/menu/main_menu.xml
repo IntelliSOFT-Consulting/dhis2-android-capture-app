@@ -51,5 +51,10 @@
             android:icon="@drawable/ic_menu_info"
             android:title="@string/about" />
 
+        <item
+            android:id="@+id/menu_help_desk"
+            android:icon="@drawable/ic_menu_help_desk"
+            android:title="@string/help_desk_title" />
+
     </group>
 </menu>

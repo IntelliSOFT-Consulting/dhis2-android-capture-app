@@ -270,6 +270,20 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <TextView
+            android:id="@+id/helpDesk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:gravity="center"
+            android:onClick="@{()->presenter.onHelpDesk()}"
+            android:text="@string/helpdesk"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/textSize_12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/loginButtons"/>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/loginButtons"
             android:layout_width="match_parent"

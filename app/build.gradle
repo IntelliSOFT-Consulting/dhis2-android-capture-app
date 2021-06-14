@@ -40,13 +40,13 @@ android {
         applicationId "com.nacare.capture"
         minSdkVersion versions.minSdk
         targetSdkVersion versions.sdk
-        versionCode versions.vCode
+        versionCode 200
         versionName versions.vName
         testInstrumentationRunner "org.dhis2.Dhis2Runner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
 
-        setProperty("archivesBaseName", "dhis2-v" + versions.vName)
+        setProperty("archivesBaseName", "Nacare-Capture-v" + versions.vName)
 
         buildConfigField "String", "SDK_VERSION", "\"" + libraries.dhis2sdk + "\""
         buildConfigField "String", "MAPBOX_ACCESS_TOKEN", "\"pk.eyJ1Ijoib3Jpa2dnIiwiYSI6ImNqdWpqb24zYTFsOXo0M2xwcXRseGx3aXkifQ.6N9aqvpqdrrSBwO9GyfjUw\""
@@ -133,7 +133,14 @@ android {
         dhis {
             applicationId "com.nacare.capture"
             dimension "default"
-            versionCode versions.vCode
+            versionCode  203
+            versionName versions.vName
+        }
+
+        nacare {
+            applicationId "com.nacare.capture"
+            dimension "default"
+            versionCode 200
             versionName versions.vName
         }
 
