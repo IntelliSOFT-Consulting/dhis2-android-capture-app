@@ -11,7 +11,7 @@
       "type": "SINGLE",
       "filters": [],
       "properties": [],
-      "versionCode": 203,
+      "versionCode": 204,
       "versionName": "2.4.0.1",
       "enabled": true,
       "outputFile": "Nacare-Capture-v2.4.0.1-dhis-release.apk"
