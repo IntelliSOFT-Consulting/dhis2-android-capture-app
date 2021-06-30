@@ -301,20 +301,20 @@ class MainActivity :
                 tag = getString(R.string.SYNC_MANAGER)
                 binding.filterActionButton.visibility = View.GONE
             }
-            R.id.qr_scan -> {
-                activeFragment = QrReaderFragment()
-                tag = getString(R.string.QR_SCANNER)
-                binding.filterActionButton.visibility = View.GONE
-            }
+//            R.id.qr_scan -> {
+//                activeFragment = QrReaderFragment()
+//                tag = getString(R.string.QR_SCANNER)
+//                binding.filterActionButton.visibility = View.GONE
+//            }
             R.id.nfc_scan -> {
                 val intentNfc = Intent(this, NfcDataWriteActivity::class.java)
                 startActivity(intentNfc)
             }
-            R.id.menu_jira -> {
-                activeFragment = JiraFragment()
-                tag = getString(R.string.jira_report)
-                binding.filterActionButton.visibility = View.GONE
-            }
+//            R.id.menu_jira -> {
+//                activeFragment = JiraFragment()
+//                tag = getString(R.string.jira_report)
+//                binding.filterActionButton.visibility = View.GONE
+//            }
             R.id.menu_about -> {
                 activeFragment = AboutFragment()
                 tag = getString(R.string.about)

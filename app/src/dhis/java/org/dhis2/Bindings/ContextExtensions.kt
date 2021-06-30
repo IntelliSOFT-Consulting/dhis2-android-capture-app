@@ -47,5 +47,5 @@ fun Context.hasPermissions(permissions: Array<String>): Boolean {
 }
 
 fun Context.showSMS(): Boolean {
-    return BuildConfig.FLAVOR == "dhis"
+    return false;
 }

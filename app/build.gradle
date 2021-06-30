@@ -133,7 +133,7 @@ android {
         dhis {
             applicationId "com.nacare.capture"
             dimension "default"
-            versionCode  204
+            versionCode  208
             versionName versions.vName
         }
 

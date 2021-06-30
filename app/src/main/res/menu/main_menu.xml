@@ -12,10 +12,10 @@
     <group
         android:id="@+id/close_section"
         android:checkableBehavior="single">
-        <item
-            android:id="@+id/qr_scan"
-            android:icon="@drawable/ic_qr"
-            android:title="@string/QR_SCANNER" />
+<!--        <item-->
+<!--            android:id="@+id/qr_scan"-->
+<!--            android:icon="@drawable/ic_qr"-->
+<!--            android:title="@string/QR_SCANNER" />-->
 
         <item
             android:id="@+id/nfc_scan"
@@ -41,10 +41,10 @@
     <group
         android:id="@+id/extra_section"
         android:checkableBehavior="single">
-        <item
-            android:id="@+id/menu_jira"
-            android:icon="@drawable/ic_jira"
-            android:title="@string/jira_report" />
+<!--        <item-->
+<!--            android:id="@+id/menu_jira"-->
+<!--            android:icon="@drawable/ic_jira"-->
+<!--            android:title="@string/jira_report" />-->
 
         <item
             android:id="@+id/menu_about"
