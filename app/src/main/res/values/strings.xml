@@ -1,7 +1,7 @@
 <resources>
     <!--GENERAL-->
-    <string name="app_name">NaCaRe-Ke Demo</string>
-    <string name="logo_text">NaCaRe-Ke Demo</string>
+    <string name="app_name">NaCaRe-Ke Capture</string>
+    <string name="logo_text">NaCaRe-Ke Capture</string>
     <string name="logo_number">1</string>
     <string name="tab" translatable="false">\u0009</string>
     <string name="default_notification_channel_id" translatable="false">20180901</string>

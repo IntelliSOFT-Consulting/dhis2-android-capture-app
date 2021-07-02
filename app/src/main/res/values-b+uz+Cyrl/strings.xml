@@ -1,7 +1,7 @@
 <resources>
     <!--GENERAL-->
-    <string name="app_name">NaCaRe-Ke Demo</string>
-    <string name="logo_text">NaCaRe-Ke Demo</string>
+    <string name="app_name">NaCaRe-Ke Capture</string>
+    <string name="logo_text">NaCaRe-Ke Capture</string>
     <string name="logo_number">2</string>
     <!-- Warnings and error messages -->
     <string name="error">Хатолик</string>

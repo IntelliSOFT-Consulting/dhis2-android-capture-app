@@ -37,10 +37,10 @@ android {
     compileSdkVersion versions.sdk
     buildToolsVersion versions.tools
     defaultConfig {
-        applicationId "com.nacare.capture"
+        applicationId "com.nacare.ke.capture"
         minSdkVersion versions.minSdk
         targetSdkVersion versions.sdk
-        versionCode 200
+        versionCode 302
         versionName versions.vName
         testInstrumentationRunner "org.dhis2.Dhis2Runner"
         vectorDrawables.useSupportLibrary = true
@@ -131,9 +131,9 @@ android {
 
     productFlavors {
         dhis {
-            applicationId "com.nacare.capture"
+            applicationId "com.nacare.ke.capture"
             dimension "default"
-            versionCode  208
+            versionCode  302
             versionName versions.vName
         }
 

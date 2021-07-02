@@ -4,14 +4,14 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.nacare.capture",
+  "applicationId": "com.nacare.ke.capture",
   "variantName": "dhisRelease",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "properties": [],
-      "versionCode": 208,
+      "versionCode": 302,
       "versionName": "2.4.0.1",
       "enabled": true,
       "outputFile": "Nacare-Capture-v2.4.0.1-dhis-release.apk"
