@@ -27,6 +27,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="allowBackup">
+        <activity android:name=".utils.HelpDeskActivity" />
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -40,11 +42,9 @@
         <meta-data
             android:name="io.sentry.debug"
             android:value="${sentry_debug}" />
-
         <meta-data
             android:name="io.sentry.traces.sample-rate"
             android:value="${sentry_sample_rate}" />
-
         <meta-data
             android:name="io.sentry.traces.activity.enable"
             android:value="false" />
@@ -54,6 +54,7 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter android:autoVerify="true">
@@ -79,13 +80,12 @@
         <activity android:name=".usescases.teiDashboard.TeiDashboardMobileActivity" />
         <activity android:name=".usescases.qrScanner.ScanActivity" />
         <activity android:name=".usescases.teiDashboard.teiProgramList.TeiProgramListActivity" />
-        <activity android:name="org.dhis2.uicomponents.map.views.MapSelectorActivity" />
+        <activity android:name=".uicomponents.map.views.MapSelectorActivity" />
         <activity android:name=".usescases.programStageSelection.ProgramStageSelectionActivity" />
         <activity android:name=".utils.WebViewActivity" />
         <activity
             android:name=".usescases.eventsWithoutRegistration.eventInitial.EventInitialActivity"
-            android:windowSoftInputMode="stateHidden" />
-        <!--<activity android:name=".usescases.teiDashboard.TeiDashboardActivity" />-->
+            android:windowSoftInputMode="stateHidden" /> <!-- <activity android:name=".usescases.teiDashboard.TeiDashboardActivity" /> -->
         <activity android:name=".usescases.qrCodes.QrActivity" />
         <activity android:name=".usescases.qrCodes.eventsworegistration.QrEventsWORegistrationActivity" />
 
@@ -139,12 +139,10 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".usescases.events.ScheduledEventActivity" />
-
         <activity
             android:name=".usescases.notes.noteDetail.NoteDetailActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".usescases.settingsprogram.SettingsProgramActivity" />
-
         <activity
             android:name="net.openid.appauth.RedirectUriReceiverActivity"
             android:exported="true"

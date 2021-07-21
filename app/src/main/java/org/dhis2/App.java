@@ -108,7 +108,7 @@ public class App extends MultiDexApplication implements Components, LifecycleObs
 
     private void initCustomCrashActivity() {
         CaocConfig.Builder.create()
-                .errorDrawable(R.drawable.ic_dhis)
+                .errorDrawable(R.mipmap.ic_launcher)
                 .apply();
     }
 

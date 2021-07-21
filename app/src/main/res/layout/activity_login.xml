@@ -40,7 +40,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_dhis_white" />
+                app:srcCompat="@drawable/ic_nacare_white" />
 
             <TextView
                 android:id="@+id/app_build_info"
@@ -270,6 +270,20 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <TextView
+            android:id="@+id/helpDesk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:gravity="center"
+            android:onClick="@{()->presenter.onHelpDesk()}"
+            android:text="@string/helpdesk"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/textSize_12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/loginButtons"/>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/loginButtons"
             android:layout_width="match_parent"
@@ -295,7 +309,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:visibility="gone"
-                app:icon="@drawable/ic_dhis"
+                app:icon="@mipmap/ic_launcher"
                 app:layout_constraintTop_toBottomOf="@id/login"
                 tools:text="Log in with google" />
 

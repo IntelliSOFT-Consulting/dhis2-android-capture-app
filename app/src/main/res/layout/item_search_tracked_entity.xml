@@ -371,7 +371,7 @@
                         android:background="@drawable/rounded_square"
                         android:backgroundTint="?colorPrimaryLight"
                         android:padding="2dp"
-                        tools:src="@drawable/ic_dhis" />
+                        tools:src="@mipmap/ic_launcher" />
                 </LinearLayout>
 
                 <ImageView

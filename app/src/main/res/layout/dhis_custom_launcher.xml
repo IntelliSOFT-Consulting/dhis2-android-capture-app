@@ -14,7 +14,7 @@
         android:contentDescription="@string/appwidget_text"
         android:scaleType="centerInside"
         android:padding="5dp"
-        tools:src="@drawable/ic_dhis" />
+        tools:src="@mipmap/ic_launcher" />
 
 
     <TextView

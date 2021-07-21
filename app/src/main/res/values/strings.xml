@@ -1,8 +1,8 @@
 <resources>
     <!--GENERAL-->
-    <string name="app_name">Dhis2</string>
-    <string name="logo_text">dhis</string>
-    <string name="logo_number">2</string>
+    <string name="app_name">NaCaRe-Ke Capture</string>
+    <string name="logo_text">NaCaRe-Ke Capture</string>
+    <string name="logo_number">1</string>
     <string name="tab" translatable="false">\u0009</string>
     <string name="default_notification_channel_id" translatable="false">20180901</string>
     <!-- Warnings and error messages -->
@@ -495,7 +495,7 @@
     <string name="biometrics_security_text">Use your fingerprint to log in with this user?</string>
     <string name="tab_tables">Tables</string>
     <string name="table">Table</string>
-    <string name="login_https">https://</string>
+    <string name="login_https">http://74.207.234.206:8080/</string>
     <string name="delete_local_data_message">Non synchronized data will be lost. Do you really want to continue?</string>
     <string name="local_data_accept">Accept</string>
     <string name="delete_local_data_error">Data could not be deleted. Please retry.</string>
@@ -843,4 +843,6 @@
     <string name="week_period_span_default_label">Week %d %s to %s</string>
     <string name="biweek_period_span_default_label" translatable="false">%d %s - %d %s</string>
     <string name="unsupported_field_description">This field is not available for mobile capture</string>
+    <string name="helpdesk">HelpDesk</string>
+    <string name="help_desk_title">Help Desk</string>
 </resources>

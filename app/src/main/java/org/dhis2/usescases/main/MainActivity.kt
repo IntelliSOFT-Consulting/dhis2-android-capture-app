@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
 import android.transition.ChangeBounds
 import android.transition.TransitionManager
@@ -14,7 +15,6 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableInt
 import androidx.drawerlayout.widget.DrawerLayout
-import javax.inject.Inject
 import org.dhis2.Bindings.app
 import org.dhis2.BuildConfig
 import org.dhis2.R
@@ -31,6 +31,7 @@ import org.dhis2.usescases.qrReader.QrReaderFragment
 import org.dhis2.usescases.settings.SyncManagerFragment
 import org.dhis2.usescases.teiDashboard.nfcdata.NfcDataWriteActivity
 import org.dhis2.utils.Constants
+import org.dhis2.utils.Constants.HELP_DESK_URL
 import org.dhis2.utils.DateUtils
 import org.dhis2.utils.analytics.BLOCK_SESSION
 import org.dhis2.utils.analytics.CLICK
@@ -41,6 +42,7 @@ import org.dhis2.utils.filters.FilterManager
 import org.dhis2.utils.filters.FiltersAdapter
 import org.dhis2.utils.session.PIN_DIALOG_TAG
 import org.dhis2.utils.session.PinDialog
+import javax.inject.Inject
 
 private const val FRAGMENT = "Fragment"
 
@@ -299,24 +301,28 @@ class MainActivity :
                 tag = getString(R.string.SYNC_MANAGER)
                 binding.filterActionButton.visibility = View.GONE
             }
-            R.id.qr_scan -> {
-                activeFragment = QrReaderFragment()
-                tag = getString(R.string.QR_SCANNER)
-                binding.filterActionButton.visibility = View.GONE
-            }
+//            R.id.qr_scan -> {
+//                activeFragment = QrReaderFragment()
+//                tag = getString(R.string.QR_SCANNER)
+//                binding.filterActionButton.visibility = View.GONE
+//            }
             R.id.nfc_scan -> {
                 val intentNfc = Intent(this, NfcDataWriteActivity::class.java)
                 startActivity(intentNfc)
             }
-            R.id.menu_jira -> {
-                activeFragment = JiraFragment()
-                tag = getString(R.string.jira_report)
-                binding.filterActionButton.visibility = View.GONE
-            }
+//            R.id.menu_jira -> {
+//                activeFragment = JiraFragment()
+//                tag = getString(R.string.jira_report)
+//                binding.filterActionButton.visibility = View.GONE
+//            }
             R.id.menu_about -> {
                 activeFragment = AboutFragment()
                 tag = getString(R.string.about)
                 binding.filterActionButton.visibility = View.GONE
+            }
+            R.id.menu_help_desk -> {
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(HELP_DESK_URL))
+                startActivity(browserIntent)
             }
             R.id.block_button -> {
                 analyticsHelper.setEvent(BLOCK_SESSION, CLICK, BLOCK_SESSION)
