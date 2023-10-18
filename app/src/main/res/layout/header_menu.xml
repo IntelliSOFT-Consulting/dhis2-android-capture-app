@@ -7,7 +7,6 @@
     android:background="?colorPrimary"
     android:padding="8dp">
 
-
     <TextView
         android:id="@+id/user_info"
         android:layout_width="match_parent"
@@ -26,6 +25,6 @@
         android:padding="10dp"
         app:layout_constraintBottom_toTopOf="@id/user_info"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_dhis_white"
+        app:srcCompat="@drawable/logo_front"
         tools:ignore="ContentDescription" />
 </androidx.constraintlayout.widget.ConstraintLayout>

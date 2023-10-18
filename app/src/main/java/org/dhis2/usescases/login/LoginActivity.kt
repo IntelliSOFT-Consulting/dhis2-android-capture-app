@@ -106,6 +106,7 @@ class LoginActivity : ActivityGlobalAbstract(), LoginContracts.View {
                         EXTRA_ACCOUNT_DISABLED,
                         true
                     )
+
                     null -> {
                         // Nothing to do in this case
                     }
@@ -150,7 +151,7 @@ class LoginActivity : ActivityGlobalAbstract(), LoginContracts.View {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
 
         binding.presenter = presenter
-        setLoginVisibility(false)
+        setLoginVisibility(true)
 
         presenter.isDataComplete.observe(this) { this.setLoginVisibility(it) }
 
@@ -169,13 +170,13 @@ class LoginActivity : ActivityGlobalAbstract(), LoginContracts.View {
 
         binding.serverUrlEdit.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
-                if (checkUrl(binding.serverUrlEdit.text.toString())) {
-                    binding.accountRecovery.visibility = View.VISIBLE
-                    binding.loginOpenId.isEnabled = true
-                } else {
-                    binding.accountRecovery.visibility = View.GONE
-                    binding.loginOpenId.isEnabled = false
-                }
+                /*   if (checkUrl(binding.serverUrlEdit.text.toString())) {
+                   binding.accountRecovery.visibility = View.VISIBLE
+                     binding.loginOpenId.isEnabled = true
+                 } else {
+                     binding.accountRecovery.visibility = View.GONE
+                     binding.loginOpenId.isEnabled = false
+                 }*/
             }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -189,9 +190,6 @@ class LoginActivity : ActivityGlobalAbstract(), LoginContracts.View {
 
         binding.serverUrlEdit.onRightDrawableClicked { presenter.onQRClick() }
 
-        binding.clearPassButton.setOnClickListener { binding.userPassEdit.text = null }
-        binding.clearUserNameButton.setOnClickListener { binding.userNameEdit.text = null }
-        binding.clearUrl.setOnClickListener { binding.serverUrlEdit.text = null }
 
         presenter.loginProgressVisible.observe(this) { show ->
             showLoginProgress(show)
@@ -208,12 +206,14 @@ class LoginActivity : ActivityGlobalAbstract(), LoginContracts.View {
         if (!isDeletion && accountsCount == 1) {
             blockLoginInfo()
         }
+
+        binding.serverUrlEdit.setText("http://45.79.116.38:8080")
     }
 
     private fun checkUrl(urlString: String): Boolean {
         return URLUtil.isValidUrl(urlString) &&
-            Patterns.WEB_URL.matcher(urlString).matches() &&
-            HttpUrl.parse(urlString) != null
+                Patterns.WEB_URL.matcher(urlString).matches() &&
+                HttpUrl.parse(urlString) != null
     }
 
     override fun setTestingCredentials() {
@@ -275,9 +275,9 @@ class LoginActivity : ActivityGlobalAbstract(), LoginContracts.View {
     }
 
     override fun showUnlockButton() {
-        binding.unlock.visibility = View.VISIBLE
-        binding.logout.visibility = View.GONE
-        onUnlockClick(binding.unlock)
+//        binding.unlock.visibility = View.VISIBLE
+//        binding.logout.visibility = View.GONE
+//        onUnlockClick(binding.unlock)
     }
 
     override fun renderError(throwable: Throwable) {
@@ -292,7 +292,7 @@ class LoginActivity : ActivityGlobalAbstract(), LoginContracts.View {
     }
 
     override fun setLoginVisibility(isVisible: Boolean) {
-        binding.login.isEnabled = isVisible
+        binding.loginButton.isEnabled = isVisible
     }
 
     private fun showLoginProgress(showLogin: Boolean) {
@@ -301,12 +301,12 @@ class LoginActivity : ActivityGlobalAbstract(), LoginContracts.View {
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
             )
-            binding.credentialLayout.visibility = View.GONE
-            binding.progressLayout.visibility = View.VISIBLE
+//            binding.credentialLayout.visibility = View.GONE
+//            binding.progressLayout.visibility = View.VISIBLE
         } else {
             window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-            binding.credentialLayout.visibility = View.VISIBLE
-            binding.progressLayout.visibility = View.GONE
+//            binding.credentialLayout.visibility = View.VISIBLE
+//            binding.progressLayout.visibility = View.GONE
         }
     }
 
@@ -348,8 +348,8 @@ class LoginActivity : ActivityGlobalAbstract(), LoginContracts.View {
             },
             {
                 analyticsHelper.setEvent(FORGOT_CODE, CLICK, FORGOT_CODE)
-                binding.unlock.visibility = View.GONE
-                binding.logout.visibility = View.GONE
+//                binding.unlock.visibility = View.GONE
+//                binding.logout.visibility = View.GONE
             }
         )
             .show(supportFragmentManager, PIN_DIALOG_TAG)
@@ -360,19 +360,19 @@ class LoginActivity : ActivityGlobalAbstract(), LoginContracts.View {
     }
 
     override fun setAutocompleteAdapters() {
-        binding.serverUrlEdit.dropDownWidth = resources.displayMetrics.widthPixels
-        binding.userNameEdit.dropDownWidth = resources.displayMetrics.widthPixels
+//        binding.serverUrlEdit.dropDownWidth = resources.displayMetrics.widthPixels
+//        binding.userNameEdit.dropDownWidth = resources.displayMetrics.widthPixels
 
         val (urls, users) = presenter.getAutocompleteData(testingCredentials)
 
         urls.let {
             val urlAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, it)
-            binding.serverUrlEdit.setAdapter(urlAdapter)
+//            binding.serverUrlEdit.setAdapter(urlAdapter)
         }
 
         users.let {
             val userAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, it)
-            binding.userNameEdit.setAdapter(userAdapter)
+//            binding.userNameEdit.setAdapter(userAdapter)
         }
     }
 
@@ -384,11 +384,12 @@ class LoginActivity : ActivityGlobalAbstract(), LoginContracts.View {
 
     private fun onLoginDataUpdated(displayTrackingMessage: Boolean) {
         when {
-            displayTrackingMessage -> showCrashlyticsDialog()
+//            displayTrackingMessage -> showCrashlyticsDialog()
             !presenter.areSameCredentials() -> {
                 handleFingerPrint()
                 goToNextScreen()
             }
+
             else -> goToNextScreen()
         }
     }
@@ -427,7 +428,7 @@ class LoginActivity : ActivityGlobalAbstract(), LoginContracts.View {
 
     override fun onBackPressed() {
         if (isPinScreenVisible) {
-            binding.pinLayout.root.visibility = View.GONE
+//            binding.pinLayout.root.visibility = View.GONE
             isPinScreenVisible = false
         } else {
             super.onBackPressed()
@@ -487,8 +488,6 @@ class LoginActivity : ActivityGlobalAbstract(), LoginContracts.View {
         binding.userNameEdit.alpha = 1f
         binding.serverUrlEdit.isEnabled = true
         binding.userNameEdit.isEnabled = true
-        binding.clearUrl.visibility = View.VISIBLE
-        binding.clearUserNameButton.visibility = View.VISIBLE
     }
 
     private fun blockLoginInfo() {
@@ -496,8 +495,6 @@ class LoginActivity : ActivityGlobalAbstract(), LoginContracts.View {
         binding.userNameEdit.alpha = 0.5f
         binding.serverUrlEdit.isEnabled = false
         binding.userNameEdit.isEnabled = false
-        binding.clearUrl.visibility = View.GONE
-        binding.clearUserNameButton.visibility = View.GONE
     }
 
     /*
@@ -544,7 +541,7 @@ class LoginActivity : ActivityGlobalAbstract(), LoginContracts.View {
     }
 
     private fun setUpLoginInfo() {
-        binding.appBuildInfo.text = buildInfo()
+        binding.serverUrlEdit.setText("http://45.79.116.38:8080")
     }
 
     override fun getDefaultServerProtocol(): String = getString(R.string.login_https)
@@ -552,11 +549,7 @@ class LoginActivity : ActivityGlobalAbstract(), LoginContracts.View {
     private fun showLoginOptions(authServiceModel: AuthServiceModel?) {
         authServiceModel?.let {
             binding.serverUrlEdit.setText(authServiceModel.serverUrl)
-            binding.loginOpenId.visibility = View.VISIBLE
-            binding.loginOpenId.text = authServiceModel.loginLabel
-            binding.loginOpenId.setOnClickListener {
-                presenter.openIdLogin(authServiceModel.toOpenIdConfig())
-            }
+
         }
     }
 

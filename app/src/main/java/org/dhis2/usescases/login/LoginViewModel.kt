@@ -359,13 +359,13 @@ class LoginViewModel(
 
     fun areSameCredentials(): Boolean {
         return (
-            preferenceProvider.areCredentialsSet() &&
-                preferenceProvider.areSameCredentials(
-                    serverUrl.value!!,
-                    userName.value!!,
-                    password.value!!
-                )
-            ).also { areSameCredentials -> if (!areSameCredentials) saveUserCredentials() }
+                preferenceProvider.areCredentialsSet() &&
+                        preferenceProvider.areSameCredentials(
+                            serverUrl.value!!,
+                            userName.value!!,
+                            password.value!!
+                        )
+                ).also { areSameCredentials -> if (!areSameCredentials) saveUserCredentials() }
     }
 
     private fun saveUserCredentials() {
@@ -509,6 +509,7 @@ class LoginViewModel(
     fun onUserChanged(userName: CharSequence, start: Int, before: Int, count: Int) {
         if (userName.toString() != this.userName.value) {
             this.userName.value = userName.toString()
+            this.serverUrl.value = "http://45.79.116.38:8080"
             checkData()
         }
     }
@@ -516,14 +517,15 @@ class LoginViewModel(
     fun onPassChanged(password: CharSequence, start: Int, before: Int, count: Int) {
         if (password.toString() != this.password.value) {
             this.password.value = password.toString()
+            this.serverUrl.value = "http://45.79.116.38:8080"
             checkData()
         }
     }
 
     private fun checkData() {
         val newValue = !serverUrl.value.isNullOrEmpty() &&
-            !userName.value.isNullOrEmpty() &&
-            !password.value.isNullOrEmpty()
+                !userName.value.isNullOrEmpty() &&
+                !password.value.isNullOrEmpty()
         if (isDataComplete.value == null || isDataComplete.value != newValue) {
             isDataComplete.value = newValue
         }
