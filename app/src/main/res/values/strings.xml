@@ -1,7 +1,7 @@
 <resources>
     <!--GENERAL-->
-    <string name="app_name">Dhis2</string>
-    <string name="logo_text">dhis</string>
+    <string name="app_name">NaCaRe-Ke</string>
+    <string name="logo_text">nacare</string>
     <string name="logo_number">2</string>
     <string name="tab" translatable="false">\u0009</string>
     <string name="default_notification_channel_id" translatable="false">20180901</string>
@@ -956,4 +956,6 @@
     <string name="dashboard_menu_delete_person">Delete Person</string>
     <string name="permission_notification_denied">Notification permission is denied.</string>
     <string name="permission_notification_granted">Notification permission granted.</string>
+    <string name="login">Login</string>
+    <string name="server_url">Server URL</string>
 </resources>
