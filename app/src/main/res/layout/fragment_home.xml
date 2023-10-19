@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".usescases.main.home.HomeFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -18,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="@string/date_of_data"
+            android:text="@string/choose_date_name"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -40,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="@string/select_organization"
+            android:text="@string/org_unit_name"
             android:textSize="16sp"
             android:textStyle="bold" />
 
