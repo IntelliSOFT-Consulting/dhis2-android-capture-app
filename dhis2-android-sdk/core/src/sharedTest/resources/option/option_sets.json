@@ -1,0 +1,22 @@
+{
+  "optionSets": [
+    {
+      "lastUpdated": "2015-08-06T14:23:38.789",
+      "created": "2014-06-22T10:59:26.564",
+      "name": "Age category",
+      "id": "VQ2lai3OfVG",
+      "displayName": "Age category",
+      "valueType": "TEXT",
+      "version": 1
+    },
+    {
+      "lastUpdated": "2015-08-06T14:23:38.789",
+      "created": "2014-06-22T10:59:26.564",
+      "name": "One option",
+      "id": "TQ2lai3OfVG",
+      "displayName": "One option",
+      "valueType": "NUMBER",
+      "version": 2
+    }
+  ]
+}

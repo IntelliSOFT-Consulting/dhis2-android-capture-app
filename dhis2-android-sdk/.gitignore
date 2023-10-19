@@ -1,0 +1,39 @@
+# Eclipse
+.project
+.classpath
+.settings
+
+# IntelliJ IDEA
+*.iml
+*.ipr
+*.iws
+out
+
+# ignore .idea directory, except copyright
+!.idea
+.idea/*
+!.idea/copyright
+!.idea/gradle.xml
+!.idea/scopes
+.idea/scopes/*
+!.idea/scopes/copyright.xml
+
+# Ant
+build.xml
+local.properties
+proguard.cfg
+
+# Gradle
+.gradle
+build
+
+# OSX
+.DS_Store
+
+# Android
+*.apk
+
+# Secret keys
+secrets.properties
+
+core/src/main/java/org/hisp/dhis/android/core/trackedentity/TeisEndPointCall.java

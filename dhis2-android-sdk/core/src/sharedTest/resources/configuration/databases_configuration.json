@@ -1,0 +1,20 @@
+{
+  "versionCode": 260,
+  "maxAccounts": 3,
+  "accounts": [
+    {
+      "username": "user1",
+      "serverUrl": "server1",
+      "databaseName": "dbname1.db",
+      "encrypted": true,
+      "databaseCreationDate": "2014-06-06T20:44:21.375"
+    },
+    {
+      "username": "user2",
+      "serverUrl": "server2",
+      "databaseName": "dbname2.db",
+      "encrypted": true,
+      "databaseCreationDate": "2014-06-04T20:44:21.375"
+    }
+  ]
+}

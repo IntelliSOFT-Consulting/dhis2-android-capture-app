@@ -1,0 +1,39 @@
+{
+  "trackedEntityTypes": [
+    {
+      "lastUpdated": "2015-10-14T13:36:53.063",
+      "created": "2014-08-20T12:28:56.409",
+      "name": "Person",
+      "id": "nEenWmSyUEp",
+      "displayDescription": "Person",
+      "displayName": "Person",
+      "description": "Person",
+      "featureType": "NONE",
+      "style": {
+        "color": "#000",
+        "icon": "my-tracked-entity-attribute-icon-name"
+      },
+      "trackedEntityTypeAttributes": [
+        {
+          "displayInList": true,
+          "searchable": true,
+          "mandatory": false,
+          "trackedEntityType": {
+            "id": "nEenWmSyUEp"
+          },
+          "trackedEntityAttribute": {
+            "id": "cejWyOfXge6"
+          }
+        },
+        {
+          "displayInList": true,
+          "searchable": true,
+          "mandatory": false,
+          "trackedEntityType": {
+            "id": "nEenWmSyUEp"
+          }
+        }
+      ]
+    }
+  ]
+}

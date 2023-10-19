@@ -1,0 +1,77 @@
+{
+  "trackedEntityAttributes": [
+    {
+      "id": "cejWyOfXge6",
+      "lastUpdated": "2016-08-04T11:48:56.928",
+      "created": "2014-01-09T19:12:46.551",
+      "name": "TB number",
+      "shortName": "TB number",
+      "valueType": "NUMBER",
+      "programScope": false,
+      "orgunitScope": false,
+      "displayInListNoProgram": false,
+      "displayName": "TB number",
+      "pattern": "RANDOM(XXX######)",
+      "unique": false,
+      "inherit": false,
+      "fieldMask": "XXXXX",
+      "access": {
+        "read": true,
+        "updateWithSection": true,
+        "externalize": false,
+        "delete": true,
+        "write": true,
+        "manage": false
+      },
+      "legendSets": [
+        {
+          "id": "QiOkbpGEud4"
+        },
+        {
+          "id": "rtOkbpGEud4"
+        }
+      ]
+    },
+    {
+      "id": "aejWyOfXge6",
+      "lastUpdated": "2016-08-04T11:48:56.928",
+      "created": "2014-01-09T19:12:46.551",
+      "name": "Age",
+      "shortName": "Age",
+      "formName": "formname",
+      "displayFormName": "displayformname",
+      "valueType": "TEXT",
+      "programScope": true,
+      "orgunitScope": true,
+      "displayInListNoProgram": true,
+      "displayOnVisitSchedule": true,
+      "sortOrderInListNoProgram": 0,
+      "displayName": "Age",
+      "expression": "expression",
+      "generated": true,
+      "pattern": "RANDOM(##)",
+      "unique": true,
+      "inherit": true,
+      "optionSet": {
+        "id": "VQ2lai3OfVG"
+      },
+      "legendSets": [
+        {
+          "id": "rtOkbpGEud4"
+        }
+      ],
+      "access": {
+        "read": true,
+        "updateWithSection": true,
+        "externalize": false,
+        "delete": true,
+        "write": true,
+        "manage": false
+      },
+      "style": {
+        "color": "#556",
+        "icon": "attribute-icon"
+      }
+    }
+  ]
+}

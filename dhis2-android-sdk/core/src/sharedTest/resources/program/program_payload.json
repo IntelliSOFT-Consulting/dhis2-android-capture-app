@@ -1,0 +1,44 @@
+{
+  "programs": [
+    {
+      "id": "IpHINAT79UW",
+      "version": 3,
+      "access": {
+        "read": true,
+        "write": false,
+        "data": {
+          "read": false,
+          "write": false
+        }
+      },
+      "programTrackedEntityAttributes": [
+        {
+          "id": "K6BlNQdIxd1",
+          "trackedEntityAttribute": {
+            "id": "w75KJ2mc4zz"
+          }
+        },
+        {
+          "id": "oGv9KGJpqkl",
+          "trackedEntityAttribute": {
+            "id": "zDhUuAYrxNC"
+          }
+        },
+        {
+          "id": "YhqgQ6Iy4c4",
+          "trackedEntityAttribute": {
+            "id": "cejWyOfXge6",
+            "optionSet": {
+              "id": "pC3N9N77UmT"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "q04UBOqq3rp",
+      "version": 1,
+      "programTrackedEntityAttributes": []
+    }
+  ]
+}

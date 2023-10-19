@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <!--  <group android:checkableBehavior="single">
+          <item
+              android:id="@+id/navWipeData"
+              android:icon="@drawable/ic_delete_forever_black_24dp"
+              android:title="@string/wipe_data" />
+      </group>
+
+      <item android:title="@string/session">
+          <menu>
+              <item
+                  android:id="@+id/navExit"
+                  android:icon="@drawable/ic_exit_to_app_black_24dp"
+                  android:title="@string/log_out" />
+          </menu>
+      </item>-->
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/baseline_home_24"
+            android:title="Home" />
+        <item
+            android:id="@+id/nav_cases"
+            android:icon="@drawable/comorbidities"
+            android:title="Cases"
+            android:visible="true" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/settings"
+            android:title="Settings"
+            android:visible="true" />
+        <item
+            android:id="@+id/nav_set_pin"
+            android:icon="@drawable/baseline_lock_24"
+            android:title="Set PIN"
+            android:visible="true" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/baseline_exit_to_app_24"
+            android:title="Logout" />
+    </group>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/baseline_info_24"
+            android:title="About"
+            android:visible="true" />
+        <item
+            android:id="@+id/nav_help"
+            android:icon="@drawable/baseline_help_24"
+            android:title="Help Desk"
+            android:visible="true" />
+        <item
+            android:id="@+id/nav_sync"
+            android:icon="@drawable/baseline_sync_24"
+            android:title="Sync"
+            android:visible="true" />
+    </group>
+</menu>

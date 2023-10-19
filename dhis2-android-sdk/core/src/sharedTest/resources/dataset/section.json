@@ -1,0 +1,97 @@
+{
+  "lastUpdated": "2016-10-12T13:22:42.731",
+  "id": "Y2rk0vzgvAx",
+  "code": "Code123",
+  "created": "2012-04-26T19:26:02.933",
+  "name": "Immunization",
+  "displayName": "Immunization",
+  "description": "Immunization dose administration",
+  "showColumnTotals": false,
+  "sortOrder": 2,
+  "showRowTotals": false,
+  "dataSet": {
+    "id": "BfMAe6Itzgt"
+  },
+  "greyedFields": [
+    {
+      "lastUpdated": "2018-07-22T17:23:50.111",
+      "id": "ca8lfO062zg.Prlt0C1RF0s",
+      "created": "2018-07-22T17:23:50.111",
+      "name": "Q_Vitamin A received 4-6 months ago at 12-59 dose Fixed, <1y",
+      "shortName": "Q_VitA_4-6m_VitA2 Fixed, <1y",
+      "displayName": "Q_Vitamin A received 4-6 months ago at 12-59 dose Fixed, <1y",
+      "displayShortName": "Q_VitA_4-6m_VitA2 Fixed, <1y",
+      "externalAccess": false,
+      "dimensionItem": "ca8lfO062zg.Prlt0C1RF0s",
+      "favorite": false,
+      "dimensionItemType": "DATA_ELEMENT_OPERAND",
+      "access": {
+        "read": true,
+        "update": true,
+        "externalize": false,
+        "delete": true,
+        "write": true,
+        "manage": true
+      },
+      "categoryOptionCombo": {
+        "id": "Prlt0C1RF0s"
+      },
+      "dataElement": {
+        "id": "ca8lfO062zg"
+      },
+      "favorites": [],
+      "translations": [],
+      "userGroupAccesses": [],
+      "attributeValues": [],
+      "userAccesses": [],
+      "legendSets": []
+    }
+  ],
+  "dataElements": [
+    {
+      "id": "s46m5MS0hxu"
+    },
+    {
+      "id": "UOlfIjgN8X6"
+    },
+    {
+      "id": "z7duEFcpApd"
+    },
+    {
+      "id": "x3Do5e7g4Qo"
+    },
+    {
+      "id": "pikOziyCXbM"
+    },
+    {
+      "id": "O05mAByOgAv"
+    },
+    {
+      "id": "vI2csg55S9C"
+    },
+    {
+      "id": "xc8gmAKfO95"
+    },
+    {
+      "id": "mGN1az8Xub6"
+    },
+    {
+      "id": "L2kxa2IA2cs"
+    },
+    {
+      "id": "fClA2Erf6IO"
+    },
+    {
+      "id": "I78gJm4KBo7"
+    },
+    {
+      "id": "n6aMJNLdvep"
+    },
+    {
+      "id": "l6byfWFUGaP"
+    },
+    {
+      "id": "YtbsuPPo010"
+    }
+  ]
+}

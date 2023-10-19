@@ -1,0 +1,300 @@
+{
+  "dataElements": [
+    {
+      "code": "DE_2005735",
+      "lastUpdated": "2014-11-11T21:56:05.560",
+      "id": "g9eOBujte1U",
+      "href": "https://play.dhis2.org/android-current/api/dataElements/g9eOBujte1U",
+      "created": "2012-07-20T08:36:46.552",
+      "name": "MCH ANC Visit",
+      "shortName": "ANC Visit",
+      "aggregationType": "AVERAGE",
+      "domainType": "TRACKER",
+      "displayName": "MCH ANC Visit",
+      "publicAccess": "rw------",
+      "displayShortName": "ANC Visit",
+      "externalAccess": false,
+      "valueType": "TEXT",
+      "formName": "ANC Visit",
+      "dimensionItem": "g9eOBujte1U",
+      "dimension": "dim",
+      "displayFormName": "ANC Visit",
+      "numberType": "numTy",
+      "zeroIsSignificant": false,
+      "fieldMask": "XXXXX",
+      "url": "",
+      "optionSetValue": true,
+      "dimensionItemType": "DATA_ELEMENT",
+      "access": {
+        "read": true
+      },
+      "categoryCombo": {
+        "id": "m2jTvAj5kkm"
+      },
+      "style": {
+        "color": "#645",
+        "icon": "data-element-icon"
+      },
+      "legendSets": [
+        {
+          "code": "AGE15YINT",
+          "created": "2017-06-02T11:40:33.452",
+          "lastUpdated": "2017-06-02T11:41:01.999",
+          "name": "Age 15y interval",
+          "id": "TiOkbpGEud4",
+          "displayName": "Age 15y interval",
+          "symbolizer": "color",
+          "legends": [
+            {
+              "id": "BzQkRWHS7lu",
+              "name": "45 - 60",
+              "startValue": 45,
+              "endValue": 60,
+              "color": "#F38026"
+            },
+            {
+              "id": "kEf6QhFVMab",
+              "name": "15 - 30",
+              "startValue": 15,
+              "endValue": 30,
+              "color": "#E6AE5E"
+            },
+            {
+              "id": "rlXteEDaTpt",
+              "name": "0 - 15",
+              "startValue": 0,
+              "endValue": 15,
+              "color": "#F7A629",
+              "displayName": "0 - 15"
+            }
+          ]
+        }
+      ],
+      "legendSet": {
+        "id": "TiOkbpGEud4"
+      }
+    },
+    {
+      "code": "DE_2005835",
+      "lastUpdated": "2014-10-11T21:56:05.560",
+      "id": "bx6fsa0t90x",
+      "href": "https://play.dhis2.org/android-current/api/dataElements/bx6fsa0t90x",
+      "created": "2012-09-20T08:36:46.552",
+      "name": "MCH ANC Visit",
+      "shortName": "ANC Visit",
+      "aggregationType": "AVERAGE",
+      "domainType": "TRACKER",
+      "displayName": "MCH ANC Visit",
+      "publicAccess": "rw------",
+      "displayShortName": "ANC Visit",
+      "externalAccess": false,
+      "valueType": "TEXT",
+      "formName": "ANC Visit",
+      "dimensionItem": "g9eOBujte1U",
+      "dimension": "dim",
+      "displayFormName": "ANC Visit",
+      "numberType": "numTy",
+      "zeroIsSignificant": false,
+      "url": "",
+      "optionSetValue": true,
+      "dimensionItemType": "DATA_ELEMENT",
+      "access": {
+        "read": true
+      },
+      "categoryCombo": {
+        "id": "m2jTvAj5kkm"
+      },
+      "style": {
+        "color": "#645",
+        "icon": "data-element-icon"
+      }
+    },
+    {
+      "lastUpdated": "2019-03-08T16:06:52.337",
+      "id": "jDx8LZlznYu",
+      "href": "https://play.dhis2.org/android-current/api/dataElements/jDx8LZlznYu",
+      "created": "2019-03-08T16:06:52.337",
+      "name": "AA Age months",
+      "shortName": "AA Age months",
+      "aggregationType": "SUM",
+      "domainType": "TRACKER",
+      "displayName": "AA Age months",
+      "publicAccess": "rw------",
+      "displayShortName": "AA Age months",
+      "externalAccess": false,
+      "valueType": "NUMBER",
+      "dimensionItem": "jDx8LZlznYu",
+      "displayFormName": "AA Age months",
+      "zeroIsSignificant": false,
+      "favorite": false,
+      "optionSetValue": false,
+      "dimensionItemType": "DATA_ELEMENT",
+      "access": {
+        "read": true
+      },
+      "categoryCombo": {
+        "id": "m2jTvAj5kkm"
+      },
+      "style": {
+        "color": "#645",
+        "icon": "data-element-icon"
+      }
+    },
+    {
+      "lastUpdated": "2019-03-08T16:06:35.799",
+      "id": "uFAQYm3UgBL",
+      "href": "https://play.dhis2.org/android-current/api/dataElements/uFAQYm3UgBL",
+      "created": "2019-03-08T16:06:35.799",
+      "name": "AA Age weeks",
+      "shortName": "AA Age weeks",
+      "aggregationType": "SUM",
+      "domainType": "TRACKER",
+      "displayName": "AA Age weeks",
+      "publicAccess": "rw------",
+      "displayShortName": "AA Age weeks",
+      "externalAccess": false,
+      "valueType": "NUMBER",
+      "dimensionItem": "uFAQYm3UgBL",
+      "displayFormName": "AA Age weeks",
+      "zeroIsSignificant": false,
+      "favorite": false,
+      "optionSetValue": false,
+      "dimensionItemType": "DATA_ELEMENT",
+      "access": {
+        "read": true
+      },
+      "categoryCombo": {
+        "id": "m2jTvAj5kkm"
+      },
+      "style": {
+        "color": "#645",
+        "icon": "data-element-icon"
+      }
+    },
+    {
+      "lastUpdated": "2019-03-08T16:07:10.306",
+      "id": "hB9F8vKFmlk",
+      "href": "https://play.dhis2.org/android-current/api/dataElements/hB9F8vKFmlk",
+      "created": "2019-03-08T16:07:10.306",
+      "name": "AA Age years",
+      "shortName": "AA Age years",
+      "aggregationType": "SUM",
+      "domainType": "TRACKER",
+      "displayName": "AA Age years",
+      "publicAccess": "rw------",
+      "displayShortName": "AA Age years",
+      "externalAccess": false,
+      "valueType": "NUMBER",
+      "dimensionItem": "hB9F8vKFmlk",
+      "displayFormName": "AA Age years",
+      "zeroIsSignificant": false,
+      "favorite": false,
+      "optionSetValue": false,
+      "dimensionItemType": "DATA_ELEMENT",
+      "access": {
+        "read": true
+      },
+      "categoryCombo": {
+        "id": "m2jTvAj5kkm"
+      },
+      "style": {
+        "color": "#600",
+        "icon": "data-element-icon-2"
+      }
+    },
+    {
+      "lastUpdated": "2018-08-20T16:23:55.605",
+      "id": "ciWE5jde1ax",
+      "href": "https://play.dhis2.org/android-current/api/dataElements/ciWE5jde1ax",
+      "created": "2018-08-16T17:42:35.455",
+      "name": "AA date",
+      "shortName": "AA date",
+      "aggregationType": "NONE",
+      "domainType": "TRACKER",
+      "displayName": "AA date",
+      "publicAccess": "rw------",
+      "displayShortName": "AA date",
+      "externalAccess": false,
+      "valueType": "DATE",
+      "dimensionItem": "ciWE5jde1ax",
+      "displayFormName": "AA date",
+      "zeroIsSignificant": false,
+      "favorite": false,
+      "optionSetValue": false,
+      "dimensionItemType": "DATA_ELEMENT",
+      "access": {
+        "read": true
+      },
+      "categoryCombo": {
+        "id": "m2jTvAj5kkm"
+      },
+      "style": {
+        "color": "#645",
+        "icon": "data-element-icon"
+      },
+      "legendSets": [
+        {
+          "id": "QiOkbpGEud4"
+        }
+      ],
+      "attributeValues": [
+        {
+          "value": "Direct",
+          "attribute": {
+            "lastUpdated": "2015-04-20T12:36:33.754",
+            "id": "qXS2NDUEAOS",
+            "created": "2015-04-20T12:23:04.044",
+            "name": "Collection method",
+            "code": "Collection method",
+            "indicatorAttribute": false,
+            "indicatorGroupAttribute": false,
+            "publicAccess": "rw------",
+            "userGroupAttribute": false,
+            "dataElementAttribute": true,
+            "constantAttribute": false,
+            "valueType": "LONG_TEXT",
+            "categoryOptionAttribute": false,
+            "optionSetAttribute": false,
+            "sqlViewAttribute": false,
+            "legendSetAttribute": false,
+            "displayFormName": "Collection method",
+            "trackedEntityAttributeAttribute": false,
+            "organisationUnitAttribute": false,
+            "dataSetAttribute": false,
+            "documentAttribute": false,
+            "unique": false,
+            "validationRuleGroupAttribute": false,
+            "favorite": false,
+            "dataElementGroupAttribute": false,
+            "sectionAttribute": false,
+            "trackedEntityTypeAttribute": false,
+            "userAttribute": false,
+            "displayName": "Collection method",
+            "mandatory": false,
+            "categoryOptionGroupAttribute": false,
+            "externalAccess": false,
+            "programStageAttribute": false,
+            "programAttribute": false,
+            "categoryAttribute": false,
+            "categoryOptionComboAttribute": false,
+            "categoryOptionGroupSetAttribute": false,
+            "validationRuleAttribute": false,
+            "programIndicatorAttribute": false,
+            "organisationUnitGroupAttribute": false,
+            "dataElementGroupSetAttribute": false,
+            "organisationUnitGroupSetAttribute": false,
+            "optionAttribute": false,
+            "access": {
+              "read": true,
+              "update": true,
+              "externalize": true,
+              "delete": true,
+              "write": true,
+              "manage": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
