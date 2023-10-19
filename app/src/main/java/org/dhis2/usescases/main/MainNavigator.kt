@@ -11,6 +11,7 @@ import dhis2.org.analytics.charts.ui.GroupAnalyticsFragment
 import org.dhis2.R
 import org.dhis2.usescases.about.AboutFragment
 import org.dhis2.usescases.jira.JiraFragment
+import org.dhis2.usescases.main.home.HomeFragment
 import org.dhis2.usescases.main.program.ProgramFragment
 import org.dhis2.usescases.qrReader.QrReaderFragment
 import org.dhis2.usescases.settings.SyncManagerFragment
@@ -27,6 +28,7 @@ class MainNavigator(
     ) -> Unit
 ) {
     enum class MainScreen(@StringRes val title: Int, @IdRes val navViewId: Int) {
+        HOME(R.string.done_task, R.id.menu_home),
         PROGRAMS(R.string.done_task, R.id.menu_home),
         VISUALIZATIONS(R.string.done_task, R.id.menu_home),
         SETTINGS(R.string.SYNC_MANAGER, R.id.sync_manager),
@@ -75,9 +77,27 @@ class MainNavigator(
             sharedView
         )
     }
+   fun openHomes() {
+        val programFragment = HomeFragment()
+        val sharedView = if (isVisualizations()) {
+            (currentFragment as GroupAnalyticsFragment).sharedView()
+        } else {
+            null
+        }
+        if (sharedView != null) {
+            programFragment.sharedElementEnterTransition = ChangeBounds()
+            programFragment.sharedElementReturnTransition = ChangeBounds()
+        }
+        beginTransaction(
+            HomeFragment(),
+            MainScreen.HOME,
+            sharedView
+        )
+    }
 
     fun restoreScreen(screenToRestoreName: String, languageSelectorOpened: Boolean = false) {
         when (MainScreen.valueOf(screenToRestoreName)) {
+            MainScreen.HOME -> openHomes()
             MainScreen.PROGRAMS -> openPrograms()
             MainScreen.VISUALIZATIONS -> openVisualizations()
             MainScreen.SETTINGS -> openSettings()

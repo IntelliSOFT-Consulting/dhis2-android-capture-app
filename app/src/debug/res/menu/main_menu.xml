@@ -9,7 +9,7 @@
             android:title="@string/menu_home_data" />
         <item
             android:id="@+id/menu_home"
-            android:icon="@drawable/ic_menu_home"
+            android:icon="@drawable/baseline_calendar_month_24"
             android:title="@string/menu_home_events" />
         <item
             android:id="@+id/menu_home_visualizations"

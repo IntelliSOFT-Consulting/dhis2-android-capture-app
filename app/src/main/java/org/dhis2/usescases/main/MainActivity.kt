@@ -150,6 +150,7 @@ class MainActivity :
                 R.id.navigation_tasks -> {
                 }
 
+
                 R.id.navigation_programs -> {
                     mainNavigator.openPrograms()
                 }
@@ -188,7 +189,7 @@ class MainActivity :
             }
 
             else -> {
-                changeFragment(R.id.menu_home)
+                changeFragment(R.id.menu_entry)
                 initCurrentScreen()
             }
         }
@@ -451,6 +452,10 @@ class MainActivity :
 
             R.id.menu_home -> {
                 mainNavigator.openHome(binding.navigationBar)
+            }
+
+            R.id.menu_entry -> {
+                mainNavigator.openHomes()
             }
         }
 
