@@ -6,27 +6,18 @@
         <item
             android:id="@+id/menu_home"
             android:icon="@drawable/ic_menu_home"
-            android:title="@string/menu_home" />
+            android:title="@string/menu_home_data" />
         <item
             android:id="@+id/menu_home_visualizations"
             android:visible="false"
             android:icon="@drawable/ic_menu_home"
-            android:title="@string/menu_home" />
+            android:title="@string/menu_home_data" />
     </group>
 
     <group
         android:id="@+id/close_section"
         android:checkableBehavior="single">
-        <item
-            android:id="@+id/qr_scan"
-            android:icon="@drawable/ic_qr"
-            android:title="@string/QR_SCANNER" />
 
-        <item
-            android:id="@+id/nfc_scan"
-            android:icon="@drawable/ic_nfc"
-            android:visible="false"
-            android:title="NFC Reader" />
         <item
             android:id="@+id/sync_manager"
             android:icon="@drawable/ic_menu_settings"
@@ -46,13 +37,7 @@
     <group
         android:id="@+id/extra_section"
         android:checkableBehavior="single">
-        <item android:id="@+id/menu_troubleshooting"
-            android:icon="@drawable/ic_troubleshooting"
-            android:title="@string/main_menu_troubleshooting"/>
-        <item
-            android:id="@+id/menu_jira"
-            android:icon="@drawable/ic_jira"
-            android:title="@string/jira_report" />
+
 
         <item
             android:id="@+id/menu_about"
@@ -64,9 +49,6 @@
     <group
         android:id="@+id/account_section"
         android:checkableBehavior="single">
-        <item
-            android:id="@+id/delete_account"
-            android:icon="@drawable/ic_delete"
-            android:title="@string/delete_account" />
+
     </group>
 </menu>

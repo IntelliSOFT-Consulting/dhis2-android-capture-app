@@ -18,9 +18,9 @@
     <color name="colorPrimaryLightRed">#FF9493</color>
 
     <!--GREEN THEME-->
-    <color name="colorPrimaryGreen">#218c51</color>
-    <color name="colorPrimaryDarkGreen">#14714D</color>
-    <color name="colorPrimaryLightGreen">#8CDD8E</color>
+    <color name="colorPrimaryGreen">@color/colorPrimaryDark</color>
+    <color name="colorPrimaryDarkGreen">@color/colorPrimaryDark</color>
+    <color name="colorPrimaryLightGreen">@color/colorPrimaryDark</color>
 
     <!--ORANGE THEME-->
     <color name="colorPrimaryOrange">#e95911</color>

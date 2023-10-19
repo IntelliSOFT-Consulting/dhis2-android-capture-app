@@ -182,7 +182,7 @@
 
     <!--DONE TASKS-->
     <string name="events">events</string>
-    <string name="done_task">Home</string>
+    <string name="done_task">National Cancer Registry of Kenya</string>
     <string name="app_info">App Info</string>
     <string name="log_out">Log Out</string>
     <string name="block_session">Block Session</string>
@@ -406,7 +406,7 @@
     <string name="complete_enrollment_message">Would you like to complete the enrollment as well?</string>
     <string name="check_event">Check</string>
 
-    <string name="menu_home">Home</string>
+    <string name="menu_home">National Cancer Registry of Kenya</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="showHelp">Show help</string>
@@ -958,4 +958,7 @@
     <string name="permission_notification_granted">Notification permission granted.</string>
     <string name="login">Login</string>
     <string name="server_url">Server URL</string>
+    <string name="menu_home_data">Home</string>
+    <string name="org_unit_name">Select Organization Unit</string>
+    <string name="choose_date_name">Date of Data Entry</string>
 </resources>

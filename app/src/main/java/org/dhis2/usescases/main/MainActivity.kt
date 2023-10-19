@@ -183,9 +183,7 @@ class MainActivity :
                 )
                 mainNavigator.restoreScreen(
                     screenToRestoreName = openScreen ?: restoreScreenName!!,
-                    languageSelectorOpened = openScreen != null &&
-                        MainNavigator.MainScreen.valueOf(openScreen) ==
-                        MainNavigator.MainScreen.TROUBLESHOOTING
+                    languageSelectorOpened = openScreen != null
                 )
             }
 
@@ -437,16 +435,6 @@ class MainActivity :
                 mainNavigator.openSettings()
             }
 
-            R.id.qr_scan -> {
-                presenter.trackQRScanner()
-                mainNavigator.openQR()
-            }
-
-            R.id.menu_jira -> {
-                presenter.trackJiraReport()
-                mainNavigator.openJira()
-            }
-
             R.id.menu_about -> {
                 mainNavigator.openAbout()
             }
@@ -463,14 +451,6 @@ class MainActivity :
 
             R.id.menu_home -> {
                 mainNavigator.openHome(binding.navigationBar)
-            }
-
-            R.id.menu_troubleshooting -> {
-                mainNavigator.openTroubleShooting()
-            }
-
-            R.id.delete_account -> {
-                confirmAccountDelete()
             }
         }
 
@@ -581,7 +561,7 @@ class MainActivity :
 
     private fun hasNoPermissionToInstall(): Boolean =
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-            !packageManager.canRequestPackageInstalls()
+                !packageManager.canRequestPackageInstalls()
 
     private val manageUnknownSources =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {

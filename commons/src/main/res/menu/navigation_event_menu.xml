@@ -4,7 +4,8 @@
         android:id="@+id/navigation_details"
         android:enabled="true"
         android:icon="@drawable/ic_navigation_details"
-        android:title="@string/event_overview" />
+        android:title="@string/event_overview"
+        android:visible="false" />
 
     <item
         android:id="@+id/navigation_data_entry"
@@ -16,17 +17,20 @@
         android:id="@+id/navigation_analytics"
         android:enabled="true"
         android:icon="@drawable/ic_navigation_analytics"
-        android:title="@string/navigation_analytics" />
+        android:title="@string/navigation_analytics"
+        android:visible="false" />
 
     <item
         android:id="@+id/navigation_relationships"
         android:enabled="true"
         android:icon="@drawable/ic_navigation_relationships"
-        android:title="@string/navigation_relationships" />
+        android:title="@string/navigation_relationships"
+        android:visible="false" />
 
     <item
         android:id="@+id/navigation_notes"
         android:enabled="true"
         android:icon="@drawable/ic_navigation_notes"
-        android:title="@string/navigation_notes" />
+        android:title="@string/navigation_notes"
+        android:visible="false" />
 </menu>

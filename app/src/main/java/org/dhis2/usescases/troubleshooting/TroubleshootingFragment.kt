@@ -72,12 +72,12 @@ class TroubleshootingFragment : FragmentGlobalAbstract() {
     }
 
     private fun refreshScreenLanguageChange() {
-        startActivity(
-            MainActivity.intent(
-                requireContext(),
-                MainNavigator.MainScreen.TROUBLESHOOTING
-            )
-        )
+//        startActivity(
+//            MainActivity.intent(
+//                requireContext(),
+//                MainNavigator.MainScreen.TROUBLESHOOTING
+//            )
+//        )
         requireActivity().finish()
         requireActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
     }

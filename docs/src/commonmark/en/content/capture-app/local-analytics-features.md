@@ -6,7 +6,7 @@ The DHIS2 Android App can now render analytics that have been created in the Dat
 
 To configure analytics open the Android Settings WebApp on your DHIS2 server and follow the steps below:
 
-   1. Select Home, Program or Data set from the Analytics menu
+   1. Select National Cancer Registry of Kenya, Program or Data set from the Analytics menu
    2. Click on the  "Add Visualization" button
    3. Search by typing the name of the visualization and select it by clicking on it
    4. Add an alternative title, otherwise, the app will display the name of the visualization
@@ -54,7 +54,7 @@ Users can also change The anlytics type between chart, table or single value.
 All these visualizations can be organised and displayed in groups. Groups are also configured using the Android Settings Webapp following the steps below:
 
    1. Open the Android Settings App
-   2. Click to Add a new visualization in the Analytics Menu (Home, Program or Data set)
+   2. Click to Add a new visualization in the Analytics Menu (National Cancer Registry of Kenya, Program or Data set)
    3. Select a visualization
    4. Mark the "Use a group visualization" checkbox
    5. Create or select a created group

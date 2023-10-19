@@ -64,7 +64,7 @@ class DhisCustomLauncher : AppWidgetProvider() {
                 if (!isEmpty(widgetImage)) {
                     context.resources.getIdentifier(widgetImage, "drawable", context.packageName)
                 } else {
-                    R.drawable.ic_dhis
+                    R.drawable.logo_front
                 }
 
             // Construct the RemoteViews object

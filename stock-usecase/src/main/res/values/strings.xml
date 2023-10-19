@@ -1,6 +1,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Pharmacy Stock Management</string>
-    <string name="title_activity_home">Home</string>
+    <string name="title_activity_home">National Cancer Registry of Kenya</string>
     <string name="title_activity_review">Review</string>
     <string name="action_settings">Settings</string>
 
@@ -273,7 +273,7 @@
     <string name="error_account_locked">Your user account is locked. If this is an error, contact your administrator.</string>
     <string name="error_set_value">The value could not be set.</string>
     <string name="error_ssl">There is a problem with the server certificates. Please, contact your administrator.</string>
-    <string name="done_task">Home</string>
+    <string name="done_task">National Cancer Registry of Kenya</string>
     <string name="back">Back</string>
     <string name="no_conflicts_message">There are no conflicts for this program</string>
     <string name="action_sync">Send</string>
