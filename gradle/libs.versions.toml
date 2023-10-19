@@ -95,6 +95,7 @@ kotlinmetadata = "0.5.0"
 rxrelay = "2.1.1"
 preference_ktx = "1.2.0"
 uiautomator = "2.2.0"
+org-jetbrains-kotlin-android = "1.8.21"
 
 [libraries]
 gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "gradle" }
@@ -247,6 +248,7 @@ dispatcher-dispatchEspresso = { group = "com.rickbusarow.dispatch", name = "disp
 deprecated-autoValueParcel = { group = "com.ryanharter.auto.value", name = "auto-value-parcel", version.ref = "autovalueparcel" } #TODO: Remove alongside AutoValue
 
 [plugins]
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
 
 [bundles]
 uicomponents-implementation = ["androidx-coreKtx", "androidx-appcompat", "androidx-activity-compose",

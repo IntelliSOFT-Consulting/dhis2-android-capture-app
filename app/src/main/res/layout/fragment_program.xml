@@ -75,7 +75,7 @@
             android:id="@+id/programList"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/filter" />
 
@@ -85,6 +85,7 @@
             android:layout_height="0dp"
             android:orientation="vertical"
             android:padding="@dimen/_15dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/filter">
 
@@ -151,7 +152,6 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-
                 </LinearLayout>
             </LinearLayout>
 
@@ -160,8 +160,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_gravity="center"
                 android:minWidth="@dimen/_100dp"
+                android:layout_centerHorizontal="true"
                 android:text="Next" />
         </RelativeLayout>
 

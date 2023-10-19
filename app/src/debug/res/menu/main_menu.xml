@@ -4,14 +4,18 @@
         android:id="@+id/main_sections"
         android:checkableBehavior="single">
         <item
-            android:id="@+id/menu_home"
+            android:id="@+id/menu_entry"
             android:icon="@drawable/ic_menu_home"
             android:title="@string/menu_home_data" />
         <item
-            android:id="@+id/menu_home_visualizations"
-            android:visible="false"
+            android:id="@+id/menu_home"
             android:icon="@drawable/ic_menu_home"
-            android:title="@string/menu_home_data" />
+            android:title="@string/menu_home_events" />
+        <item
+            android:id="@+id/menu_home_visualizations"
+            android:icon="@drawable/ic_menu_home"
+            android:title="@string/menu_home_events"
+            android:visible="false" />
     </group>
 
     <group

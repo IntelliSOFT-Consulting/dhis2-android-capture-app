@@ -961,4 +961,7 @@
     <string name="menu_home_data">Home</string>
     <string name="org_unit_name">Select Organization Unit</string>
     <string name="choose_date_name">Date of Data Entry</string>
+    <string name="menu_home_events">"Events "</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
