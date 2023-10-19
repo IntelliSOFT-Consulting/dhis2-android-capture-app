@@ -79,41 +79,6 @@ class ProgramFragment : FragmentGlobalAbstract(), ProgramView {
         binding.lifecycleOwner = viewLifecycleOwner
         (binding.drawerLayout.background as GradientDrawable).cornerRadius = 0f
 
-        binding.inputEditText.apply {
-            setOnClickListener {
-
-            }
-        }
-        binding.orgInputEditText.apply {
-            setOnClickListener {
-
-            }
-        }
-        binding.btnNext.apply {
-            setOnClickListener {
-                val date = binding.inputEditText.text.toString()
-                val org = binding.orgInputEditText.text.toString()
-                if (date.isEmpty()) {
-                    binding.orgInputEditText.requestFocus()
-                    Toast.makeText(
-                        requireContext(),
-                        "Please select Data entry date",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@setOnClickListener
-                }
-                if (org.isEmpty()) {
-                    binding.orgInputEditText.requestFocus()
-                    Toast.makeText(
-                        requireContext(),
-                        "Please select Organization Unit",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@setOnClickListener
-                }
-
-            }
-        }
         return binding.apply {
             presenter = this@ProgramFragment.presenter
             drawerLayout.clipWithRoundedCorners(16.dp)

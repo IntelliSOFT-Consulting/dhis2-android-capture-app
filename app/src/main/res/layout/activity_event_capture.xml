@@ -146,8 +146,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:forceShowAnalytics="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:menu="@menu/navigation_event_menu" />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <include
             android:id="@+id/calculationIndicator"
