@@ -58,11 +58,14 @@ public class SyncStatusHelper {
                 .byAggregatedSyncState().neq(State.RELATIONSHIP).blockingCount();
     }
 
+
     public static List<TrackedEntityInstance> trackedEntityInstanceList() {
         return Sdk.d2().trackedEntityModule().trackedEntityInstances()
                 .byAggregatedSyncState().neq(State.RELATIONSHIP)
                 .withTrackedEntityAttributeValues()
-//                .withProgramOwners()
+                .orderByCreated(DESC)
+                .orderByLastUpdated(DESC)
+                .orderByCreatedAtClient(DESC)
                 .blockingGet();
     }
 
@@ -93,6 +96,12 @@ public class SyncStatusHelper {
                 .trackedEntityAttributes()
                 .byUid().eq(uuid)
                 .one().blockingGet();
+    }
+    public static List<TrackedEntityAttribute> trackedEntityAttributes() {
+        return Sdk.d2().trackedEntityModule()
+                .trackedEntityAttributes()
+                .get()
+                .blockingGet();
     }
 
 

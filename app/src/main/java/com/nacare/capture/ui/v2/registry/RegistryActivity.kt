@@ -19,6 +19,7 @@ import com.nacare.capture.data.service.SyncStatusHelper
 import com.nacare.capture.models.ProgramCategory
 import com.nacare.capture.ui.v2.facility.FacilityListActivity
 import com.nacare.capture.ui.v2.patients.PatientListActivity
+import com.nacare.capture.ui.v2.patients.PatientSearchActivity
 import org.hisp.dhis.android.core.event.EventCreateProjection
 import org.hisp.dhis.android.core.event.EventStatus
 
@@ -46,7 +47,7 @@ class RegistryActivity : AppCompatActivity() {
         }
         findViewById<MaterialCardView>(R.id.patientCardView).apply {
             setOnClickListener {
-                startActivity(Intent(this@RegistryActivity, PatientListActivity::class.java))
+                startActivity(Intent(this@RegistryActivity, PatientSearchActivity::class.java))
             }
         }
         findViewById<TextView>(R.id.tv_sub_title).apply {
