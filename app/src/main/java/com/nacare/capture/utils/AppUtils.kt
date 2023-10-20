@@ -2,12 +2,16 @@ package com.nacare.capture.utils
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.graphics.Typeface
 import android.net.ConnectivityManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.DatePicker
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.android.androidskeletonapp.R
 import com.google.android.material.textfield.TextInputEditText
+import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -60,12 +64,25 @@ class AppUtils {
         }
         return isOnline
     }
+
     fun hideKeyboard(context: Context) {
         val inputMethodManager =
             context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         val rootView = (context as AppCompatActivity).window.decorView.rootView
         inputMethodManager.hideSoftInputFromWindow(rootView.windowToken, 0)
     }
+
+    fun formatEventDate(date: Date?): String {
+        var data = ""
+        data = if (date != null) {
+            val simpleDateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+            simpleDateFormat.format(date)
+        } else {
+            ""
+        }
+        return data
+    }
+
     fun disableTextInputEditText(editText: TextInputEditText) {
         editText.isFocusable = false
         editText.isCursorVisible = false
@@ -75,6 +92,7 @@ class AppUtils {
     fun generateUuid(): String {
         return UUID.randomUUID().toString()
     }
+
     fun showDatePickerDialog(
         context: Context,
         textInputEditText: TextInputEditText,
@@ -111,4 +129,14 @@ class AppUtils {
 
         datePickerDialog.show()
     }
+
+    fun makeBold(view: TextView) {
+        view.apply {
+            val currentTypeface = typeface
+            // Set a new typeface with the bold style
+            setTypeface(currentTypeface, Typeface.BOLD)
+        }
+
+    }
+
 }

@@ -8,18 +8,28 @@
     tools:context="com.nacare.capture.ui.main.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <RelativeLayout
         android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         tools:context="com.nacare.capture.ui.main.MainActivity"
         tools:layout_editor_absoluteX="204dp">
+
+        <ProgressBar
+            android:id="@+id/horizontalProgressBar"
+            style="@android:style/Widget.Material.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_margin="1dp"
+            android:indeterminate="true"
+            android:visibility="gone" />
 
         <FrameLayout
             android:id="@+id/fragmentContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            android:layout_height="match_parent"
+            android:layout_below="@+id/horizontalProgressBar" />
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

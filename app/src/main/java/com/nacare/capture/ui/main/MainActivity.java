@@ -57,23 +57,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
-
+        progressBar = findViewById(R.id.horizontalProgressBar);
         compositeDisposable = new CompositeDisposable();
 
         User user = getUser();
 
         inflateMainView();
         createNavigationView(user);
-        loadPrograms();
+
         if (savedInstanceState == null) {
             loadFragment(new ProgramsFragment());
         }
-//        loadActiveProgram()
+
+//        downloadData();
+
     }
 
-    /* private fun loadActiveProgram() {
-         val programs=SyncStatusHelper.programCount()
-     }*/
+
     private void loadFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragmentContainer, fragment);
@@ -81,15 +81,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         transaction.commit();
     }
 
-    @SuppressLint("CheckResult")
-    private void loadPrograms() {
-        Sdk.d2().programModule().programs()
-                .get()
-                .subscribe(programs -> {
-                    Log.e("TAG", "Programs Founds" + programs);
-                }); //List<Program>
-
-    }
 
     @Override
     protected void onResume() {
@@ -147,15 +138,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setSyncing() {
         isSyncing = true;
         progressBar.setVisibility(View.VISIBLE);
-        syncStatusText.setVisibility(View.VISIBLE);
         updateSyncDataAndButtons();
     }
 
     private void setSyncingFinished() {
-       /* isSyncing = false;
-        progressBar.setVisibility(View.GONE);
-        syncStatusText.setVisibility(View.GONE);
-        updateSyncDataAndButtons();*/
+        isSyncing = false;
+//        progressBar.setVisibility(View.GONE);
+        updateSyncDataAndButtons();
     }
 
     private void disableAllButtons() {
@@ -233,6 +222,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void downloadData() {
+        setSyncing();
         compositeDisposable.add(
                 Observable.merge(
                                 downloadTrackedEntityInstances(),
@@ -242,7 +232,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnComplete(this::setSyncingFinished)
-                        .doOnError(Throwable::printStackTrace)
+                        .doOnError(error ->
+                                Log.e("TAG", "Data Download Error " + error.getMessage())
+                        )
                         .subscribe());
     }
 
@@ -292,6 +284,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.nav_home) {
             loadFragment(new ProgramsFragment());
+        } else if (id == R.id.nav_sync) {
+            setSyncing();
+            downloadData();
+            uploadData();
         } else if (id == R.id.nav_cases) {
             loadFragment(new EventsFragment());
         } else if (id == R.id.nav_logout) {

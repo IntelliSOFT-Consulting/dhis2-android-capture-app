@@ -5,8 +5,12 @@ import android.content.SharedPreferences
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.android.androidskeletonapp.R
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
 
 class FormatterClass {
 
@@ -32,6 +36,17 @@ class FormatterClass {
         editor.remove(key);
         editor.apply();
 
+    }
+    fun parseEventDate(dateString: String?): Date? {
+        if (dateString != null) {
+            val simpleDateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+            try {
+                return simpleDateFormat.parse(dateString)
+            } catch (e: ParseException) {
+                e.printStackTrace()
+            }
+        }
+        return null
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

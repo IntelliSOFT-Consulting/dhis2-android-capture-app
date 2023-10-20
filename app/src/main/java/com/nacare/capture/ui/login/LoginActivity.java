@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.android.androidskeletonapp.R;
 import com.nacare.capture.data.service.ActivityStarter;
+import com.nacare.capture.ui.login.sync.SyncActivity;
 import com.nacare.capture.ui.main.MainActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -72,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                 showLoginFailed(loginResult.getError());
             }
             if (loginResult.getSuccess() != null) {
-                ActivityStarter.startActivity(this, MainActivity.getMainActivityIntent(this),true);
+                ActivityStarter.startActivity(this, SyncActivity.getMainActivityIntent(this),true);
             }
             setResult(Activity.RESULT_OK);
         });

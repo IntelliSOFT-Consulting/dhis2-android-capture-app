@@ -1,5 +1,8 @@
 package com.nacare.capture.data.service;
 
+
+import static org.hisp.dhis.android.core.arch.repositories.scope.RepositoryScope.OrderByDirection.DESC;
+
 import android.os.Build;
 
 import com.nacare.capture.models.EventWithOrganization;
@@ -7,11 +10,17 @@ import com.nacare.capture.data.Sdk;
 
 import org.hisp.dhis.android.core.common.BaseIdentifiableObject;
 import org.hisp.dhis.android.core.common.State;
+import org.hisp.dhis.android.core.dataelement.DataElement;
 import org.hisp.dhis.android.core.enrollment.Enrollment;
 import org.hisp.dhis.android.core.event.Event;
 import org.hisp.dhis.android.core.organisationunit.OrganisationUnit;
 import org.hisp.dhis.android.core.program.Program;
+import org.hisp.dhis.android.core.program.ProgramSection;
 import org.hisp.dhis.android.core.program.ProgramStage;
+import org.hisp.dhis.android.core.program.ProgramStageSection;
+import org.hisp.dhis.android.core.trackedentity.TrackedEntityAttribute;
+import org.hisp.dhis.android.core.trackedentity.TrackedEntityInstance;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,11 +40,8 @@ public class SyncStatusHelper {
                 .blockingGet();
     }
 
+
     public static Program singleProgram(String programUid) {
-     /*   return Sdk.d2().programModule()
-                .programs()
-                .get()
-                .blockingGet();*/
 
         return Sdk.d2().programModule().programs()
                 .byUid().eq(programUid)
@@ -52,8 +58,41 @@ public class SyncStatusHelper {
                 .byAggregatedSyncState().neq(State.RELATIONSHIP).blockingCount();
     }
 
+    public static List<TrackedEntityInstance> trackedEntityInstanceList() {
+        return Sdk.d2().trackedEntityModule().trackedEntityInstances()
+                .byAggregatedSyncState().neq(State.RELATIONSHIP)
+                .withTrackedEntityAttributeValues()
+//                .withProgramOwners()
+                .blockingGet();
+    }
+
+    public static List<ProgramStage> programStages(String programUuid) {
+        return Sdk.d2().programModule().programStages()
+                .byProgramUid().eq(programUuid)
+                .get()
+                .blockingGet();
+    }
+
+    public static List<ProgramStageSection> programStageSections(String programUuid) {
+        return Sdk.d2().programModule()
+                .programStageSections()
+                .byProgramStageUid().eq(programUuid)
+                .withDataElements()
+                .blockingGet();
+    }
+
     public static int singleEventCount() {
-        return Sdk.d2().eventModule().events().byEnrollmentUid().isNull().blockingCount();
+        return Sdk.d2().eventModule().events()
+                .orderByEventDate(DESC)
+                .orderByLastUpdated(DESC)
+                .byEnrollmentUid().isNull().blockingCount();
+    }
+
+    public static TrackedEntityAttribute singleAttribute(String uuid) {
+        return Sdk.d2().trackedEntityModule()
+                .trackedEntityAttributes()
+                .byUid().eq(uuid)
+                .one().blockingGet();
     }
 
 
@@ -112,8 +151,30 @@ public class SyncStatusHelper {
                 .blockingGet();
     }
 
-    public static List<Event> getAllEvents() {
-        return Sdk.d2().eventModule().events().byEnrollmentUid().isNull().blockingGet();
+    public static List<Event> getAllEvents(String uuid) {
+        return Sdk.d2().eventModule()
+                .events()
+                .byEnrollmentUid().eq(uuid)
+                .get()
+                .blockingGet();
+    }
+
+    public static List<Enrollment> getAllEnrolments() {
+        return Sdk.d2().enrollmentModule()
+                .enrollments()
+                .orderByCreated(DESC)
+                .orderByLastUpdated(DESC)
+                .orderByEnrollmentDate(DESC)
+                .get()
+                .blockingGet();
+    }
+
+    public static Enrollment getSingleEnrollment(String uuid) {
+        return Sdk.d2().enrollmentModule()
+                .enrollments()
+                .byUid().eq(uuid)
+                .withNotes()
+                .one().blockingGet();
     }
 
     public static List<Event> getAllEventsWithTrackedEntities() {
@@ -142,4 +203,6 @@ public class SyncStatusHelper {
     public static int dataValueCount() {
         return Sdk.d2().dataValueModule().dataValues().blockingCount();
     }
+
+
 }

@@ -65,7 +65,7 @@ dependencies {
     implementation project(":core")
     */
 
-    implementation ("org.hisp.dhis:android-core:1.8.0") {
+    implementation ("org.hisp.dhis:android-core:1.8.2") {
         exclude group: 'com.facebook.flipper'
     }
 
@@ -91,4 +91,5 @@ dependencies {
     }
 
     releaseImplementation "com.facebook.flipper:flipper-noop:${libraries.flipper}"
+    implementation 'com.airbnb.android:lottie:4.2.0'
 }
