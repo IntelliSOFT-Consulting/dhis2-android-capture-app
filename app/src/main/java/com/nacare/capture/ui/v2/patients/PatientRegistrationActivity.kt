@@ -2,9 +2,13 @@ package com.nacare.capture.ui.v2.patients
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
+import android.widget.CheckBox
 import android.widget.LinearLayout
+import android.widget.RadioButton
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import com.example.android.androidskeletonapp.R
@@ -12,6 +16,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.nacare.capture.data.FormatterClass
 import com.nacare.capture.data.service.SyncStatusHelper
+import com.nacare.capture.utils.AppUtils
 import org.hisp.dhis.android.core.common.ValueType
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityInstance
 
@@ -69,6 +74,363 @@ class PatientRegistrationActivity : AppCompatActivity() {
                         tvElement.text = it.uid()
                         lnParent.addView(itemView)
                     }
+                }
+
+                ValueType.valueOf( "DATE") -> {
+
+                    val itemView = layoutInflater.inflate(
+                        R.layout.item_date_edittext,
+                       lnParent,
+                        false
+                    ) as LinearLayout
+
+                    val tvName = itemView.findViewById<TextView>(R.id.tv_name)
+                    val tvElement = itemView.findViewById<TextView>(R.id.tv_element)
+                    val textInputLayout =
+                        itemView.findViewById<TextInputLayout>(R.id.textInputLayout)
+                    val editText = itemView.findViewById<TextInputEditText>(R.id.editText)
+                    tvName.text = it.displayName()
+                    tvElement.text =it.uid()
+
+                    val keywords = listOf("Birth", "Death")
+                    val max = containsAnyKeyword(it.displayName(), keywords)
+                    AppUtils.disableTextInputEditText(editText)
+                    editText.apply {
+                        setOnClickListener {
+                            AppUtils.showDatePickerDialog(
+                                context, editText, setMaxNow = max, setMinNow = false
+                            )
+                        }
+
+                        addTextChangedListener(object : TextWatcher {
+                            override fun beforeTextChanged(
+                                s: CharSequence?,
+                                start: Int,
+                                count: Int,
+                                after: Int
+                            ) {
+                                // This method is called before the text is changed.
+                            }
+
+                            override fun onTextChanged(
+                                s: CharSequence?,
+                                start: Int,
+                                before: Int,
+                                count: Int
+                            ) {
+                                if (s != null) {
+
+                                }
+                            }
+
+                            override fun afterTextChanged(s: Editable?) {
+                                // This method is called after the text has changed.
+                                // You can perform actions here based on the updated text.
+                            }
+                        })
+                    }
+                   lnParent.addView(itemView)
+                }
+
+                ValueType.valueOf( "BOOLEAN") -> {
+                    val itemView = layoutInflater.inflate(
+                        R.layout.item_radio,
+                       lnParent,
+                        false
+                    ) as LinearLayout
+
+                    val tvName = itemView.findViewById<TextView>(R.id.tv_name)
+                    val radioButtonYes = itemView.findViewById<RadioButton>(R.id.radioButtonYes)
+                    val radioButtonNo = itemView.findViewById<RadioButton>(R.id.radioButtonNo)
+                    tvName.text = it.displayName()
+
+
+                    radioButtonNo.apply {
+                        setOnCheckedChangeListener { button, isChecked ->
+                            if (isChecked) {
+
+                            }
+                        }
+                    }
+                    radioButtonYes.apply {
+                        setOnCheckedChangeListener { button, isChecked ->
+                            if (isChecked) {
+
+                            }
+                        }
+                    }
+                   lnParent.addView(itemView)
+                }
+
+
+                ValueType.valueOf(    "LONG_TEXT" )-> {
+
+                    val itemView = layoutInflater.inflate(
+                        R.layout.item_long_edittext,
+                       lnParent,
+                        false
+                    ) as LinearLayout
+
+                    val tvName = itemView.findViewById<TextView>(R.id.tv_name)
+                    val tvElement = itemView.findViewById<TextView>(R.id.tv_element)
+                    val textInputLayout =
+                        itemView.findViewById<TextInputLayout>(R.id.textInputLayout)
+                    val editText = itemView.findViewById<TextInputEditText>(R.id.editText)
+                    tvName.text = it.displayName()
+                    tvElement.text =it.uid()
+
+
+                    editText.apply {
+                        addTextChangedListener(object : TextWatcher {
+                            override fun beforeTextChanged(
+                                s: CharSequence?,
+                                start: Int,
+                                count: Int,
+                                after: Int
+                            ) {
+                                // This method is called before the text is changed.
+                            }
+
+                            override fun onTextChanged(
+                                s: CharSequence?,
+                                start: Int,
+                                before: Int,
+                                count: Int
+                            ) {
+                                if (s != null) {
+                                    viewModel.addResponse(
+                                        context, eventData,
+                                        it.id,
+                                        s.toString()
+                                    )
+                                }
+                            }
+
+                            override fun afterTextChanged(s: Editable?) {
+                                // This method is called after the text has changed.
+                                // You can perform actions here based on the updated text.
+                            }
+                        })
+                    }
+                   lnParent.addView(itemView)
+                }
+
+
+                ValueType.valueOf(   "NUMBER" )-> {
+
+                    val itemView = layoutInflater.inflate(
+                        R.layout.item_number_edittext,
+                       lnParent,
+                        false
+                    ) as LinearLayout
+
+                    val tvName = itemView.findViewById<TextView>(R.id.tv_name)
+                    val tvElement = itemView.findViewById<TextView>(R.id.tv_element)
+                    val textInputLayout =
+                        itemView.findViewById<TextInputLayout>(R.id.textInputLayout)
+                    val editText = itemView.findViewById<TextInputEditText>(R.id.editText)
+                    tvName.text = it.displayName()
+                    tvElement.text =it.uid()
+
+
+                    editText.apply {
+                        addTextChangedListener(object : TextWatcher {
+                            override fun beforeTextChanged(
+                                s: CharSequence?,
+                                start: Int,
+                                count: Int,
+                                after: Int
+                            ) {
+                                // This method is called before the text is changed.
+                            }
+
+                            override fun onTextChanged(
+                                s: CharSequence?,
+                                start: Int,
+                                before: Int,
+                                count: Int
+                            ) {
+                                if (s != null) {
+
+                                }
+                            }
+
+                            override fun afterTextChanged(s: Editable?) {
+                                // This method is called after the text has changed.
+                                // You can perform actions here based on the updated text.
+                            }
+                        })
+                    }
+                   lnParent.addView(itemView)
+                }
+
+
+                ValueType.valueOf(   "INTEGER_POSITIVE") -> {
+
+                    val itemView = layoutInflater.inflate(
+                        R.layout.item_number_edittext,
+                       lnParent,
+                        false
+                    ) as LinearLayout
+
+                    val tvName = itemView.findViewById<TextView>(R.id.tv_name)
+                    val tvElement = itemView.findViewById<TextView>(R.id.tv_element)
+                    val textInputLayout =
+                        itemView.findViewById<TextInputLayout>(R.id.textInputLayout)
+                    val editText = itemView.findViewById<TextInputEditText>(R.id.editText)
+                    tvName.text = it.displayName()
+                    tvElement.text =it.uid()
+
+
+                    editText.apply {
+                        addTextChangedListener(object : TextWatcher {
+                            override fun beforeTextChanged(
+                                s: CharSequence?,
+                                start: Int,
+                                count: Int,
+                                after: Int
+                            ) {
+                                // This method is called before the text is changed.
+                            }
+
+                            override fun onTextChanged(
+                                s: CharSequence?,
+                                start: Int,
+                                before: Int,
+                                count: Int
+                            ) {
+                                if (s != null) {
+
+                                }
+                            }
+
+                            override fun afterTextChanged(s: Editable?) {
+                                // This method is called after the text has changed.
+                                // You can perform actions here based on the updated text.
+                            }
+                        })
+                    }
+                   lnParent.addView(itemView)
+                }
+
+
+                ValueType.valueOf(  "TRUE_ONLY" )-> {
+                    val itemView = layoutInflater.inflate(
+                        R.layout.item_check_box,
+                       lnParent,
+                        false
+                    ) as LinearLayout
+
+                    val checkBox = itemView.findViewById<CheckBox>(R.id.checkBox)
+                    val tvName = itemView.findViewById<TextView>(R.id.tv_name)
+                    tvName.text = it.displayName()
+
+                    checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
+                        if (isChecked) {
+
+                        } else {
+
+                        }
+                    }
+                   lnParent.addView(itemView)
+                }
+
+
+                ValueType.valueOf(   "ORGANISATION_UNIT") -> {
+
+                    val itemView = layoutInflater.inflate(
+                        R.layout.item_org_edittext,
+                       lnParent,
+                        false
+                    ) as LinearLayout
+
+                    val tvName = itemView.findViewById<TextView>(R.id.tv_name)
+                    val tvElement = itemView.findViewById<TextView>(R.id.tv_element)
+                    val textInputLayout =
+                        itemView.findViewById<TextInputLayout>(R.id.textInputLayout)
+                    val editText = itemView.findViewById<TextInputEditText>(R.id.editText)
+                    tvName.text = it.displayName()
+                    tvElement.text =it.uid()
+
+
+                    editText.apply {
+                        addTextChangedListener(object : TextWatcher {
+                            override fun beforeTextChanged(
+                                s: CharSequence?,
+                                start: Int,
+                                count: Int,
+                                after: Int
+                            ) {
+                                // This method is called before the text is changed.
+                            }
+
+                            override fun onTextChanged(
+                                s: CharSequence?,
+                                start: Int,
+                                before: Int,
+                                count: Int
+                            ) {
+                                if (s != null) {
+
+                                }
+                            }
+
+                            override fun afterTextChanged(s: Editable?) {
+                                // This method is called after the text has changed.
+                                // You can perform actions here based on the updated text.
+                            }
+                        })
+                    }
+                   lnParent.addView(itemView)
+                }
+
+
+                ValueType.valueOf(    "PHONE_NUMBER" )-> {
+
+                    val itemView = layoutInflater.inflate(
+                        R.layout.item_phone_number_edittext,
+                       lnParent,
+                        false
+                    ) as LinearLayout
+
+                    val tvName = itemView.findViewById<TextView>(R.id.tv_name)
+                    val tvElement = itemView.findViewById<TextView>(R.id.tv_element)
+                    val textInputLayout =
+                        itemView.findViewById<TextInputLayout>(R.id.textInputLayout)
+                    val editText = itemView.findViewById<TextInputEditText>(R.id.editText)
+                    tvName.text = it.displayName()
+                    tvElement.text = it.uid()
+
+
+                    editText.apply {
+                        addTextChangedListener(object : TextWatcher {
+                            override fun beforeTextChanged(
+                                s: CharSequence?,
+                                start: Int,
+                                count: Int,
+                                after: Int
+                            ) {
+                                // This method is called before the text is changed.
+                            }
+
+                            override fun onTextChanged(
+                                s: CharSequence?,
+                                start: Int,
+                                before: Int,
+                                count: Int
+                            ) {
+                                if (s != null) {
+
+                                }
+                            }
+
+                            override fun afterTextChanged(s: Editable?) {
+                                // This method is called after the text has changed.
+                                // You can perform actions here based on the updated text.
+                            }
+                        })
+                    }
+                   lnParent.addView(itemView)
                 }
 
                 else -> {}
