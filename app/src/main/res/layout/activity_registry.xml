@@ -125,7 +125,7 @@
                             android:layout_height="40dp"
                             android:layout_gravity="center_vertical"
                             android:layout_marginEnd="@dimen/_8dp"
-                            android:src="@drawable/baseline_local_hospital_24"
+                            android:src="@drawable/facilitycap"
                             app:tint="@color/button_default_color" />
 
                         <LinearLayout
@@ -143,12 +143,12 @@
                                 android:textSize="14sp" />
 
                             <TextView
-
                                 style="@style/TextAppearance.MaterialComponents.Body2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="View Only"
-                                android:textSize="11sp" />
+                                android:text=""
+                                android:textSize="11sp"
+                                android:visibility="gone" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -191,7 +191,7 @@
                             android:layout_height="40dp"
                             android:layout_gravity="center_vertical"
                             android:layout_marginEnd="@dimen/_8dp"
-                            android:src="@drawable/baseline_person_search_24"
+                            android:src="@drawable/patientdetails"
                             app:tint="@color/button_default_color" />
 
                         <TextView
@@ -247,5 +247,5 @@
         android:foregroundTint="@color/white"
         android:tint="@color/white"
         android:visibility="visible"
-        app:srcCompat="@android:drawable/ic_menu_save" />
+        app:srcCompat="@drawable/save" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

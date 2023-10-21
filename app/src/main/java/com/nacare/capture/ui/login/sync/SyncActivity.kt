@@ -9,7 +9,7 @@ import com.example.android.androidskeletonapp.R
 import com.nacare.capture.data.Sdk
 import com.nacare.capture.data.service.ActivityStarter
 import com.nacare.capture.ui.main.MainActivity
-import com.nacare.capture.ui.v2.live.RetrofitCalls
+import com.nacare.capture.ui.v2.network_request.RetrofitCalls
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -25,6 +25,7 @@ import org.hisp.dhis.android.core.user.User
 class SyncActivity : AppCompatActivity() {
     private var isSyncing = false
     private var compositeDisposable: CompositeDisposable? = null
+
     private val retrofitCalls = RetrofitCalls()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +42,7 @@ class SyncActivity : AppCompatActivity() {
     }
     private fun loadInitialData() {
         CoroutineScope(Dispatchers.IO).launch {
-//            retrofitCalls.loadOrganization(this@SyncActivity)
+            retrofitCalls.loadOrganization(this@SyncActivity)
         }
     }
     private fun getUser(): User? {

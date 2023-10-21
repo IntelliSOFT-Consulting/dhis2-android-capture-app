@@ -11,6 +11,7 @@ import com.example.android.androidskeletonapp.R
 import com.nacare.capture.data.FormatterClass
 import com.nacare.capture.models.ProgramCategory
 import com.google.android.material.card.MaterialCardView
+import com.nacare.capture.utils.AppUtils
 
 
 class ProgramAdapter(
@@ -49,9 +50,8 @@ class ProgramAdapter(
         holder.eventTextView.text = item.name
         holder.progressTextView.text = " ${item.done}/${item.total}"
         try {
-         /*   val drawableResourceId = AppUtils.generateIcons(context, item.name)
+            val drawableResourceId = AppUtils().generateIcons(context, item.name)
             holder.leftIconImageView.setImageResource(drawableResourceId)
-*/
         } catch (e: Exception) {
 
         }

@@ -65,7 +65,6 @@
             android:columnCount="3"
             android:rowCount="4">
 
-
             <!-- Row 1 -->
 
             <RadioButton
@@ -161,7 +160,8 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:contentDescription="Draft Icon"
-            android:src="@drawable/editform" />
+            android:src="@drawable/ic_event_status_open"
+            app:tint="@color/colorPrimary" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -214,7 +214,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:contentDescription="Not Synced Icon"
-            android:src="@drawable/synccc"
+            android:src="@drawable/baseline_sync_24"
             app:tint="@color/purple_700" />
 
         <TextView
@@ -241,7 +241,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:contentDescription="Duplicate Forms Icon"
-            android:src="@drawable/evviz2"
+            android:src="@drawable/baseline_library_books_24"
             app:tint="@color/purple_700" />
 
         <TextView

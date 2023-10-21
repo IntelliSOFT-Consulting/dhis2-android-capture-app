@@ -1,27 +1,38 @@
 package com.nacare.capture.ui.v2.patients
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.RadioButton
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.android.androidskeletonapp.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.nacare.capture.data.Constants.PROGRAM_TRACKED_UUID
+import com.nacare.capture.data.Constants.PROGRAM_UUID
 import com.nacare.capture.data.FormatterClass
+import com.nacare.capture.data.Sdk
+import com.nacare.capture.data.Sdk.d2
+import com.nacare.capture.data.service.ActivityStarter
 import com.nacare.capture.data.service.SyncStatusHelper
+import com.nacare.capture.ui.main.MainActivity
 import com.nacare.capture.utils.AppUtils
 import org.hisp.dhis.android.core.common.ValueType
+import org.hisp.dhis.android.core.enrollment.EnrollmentCreateProjection
+import org.hisp.dhis.android.core.maintenance.D2Error
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityAttributeValue
+import org.hisp.dhis.android.core.trackedentity.TrackedEntityDataValueObjectRepository
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityInstance
+import org.hisp.dhis.android.core.trackedentity.TrackedEntityInstanceCreateProjection
+
 
 class PatientRegistrationActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
@@ -49,17 +60,97 @@ class PatientRegistrationActivity : AppCompatActivity() {
             this@PatientRegistrationActivity
         )
         if (enroll != null) {
+            proceedWithEnrollment(lnParent, true)
+        } else {
+            proceedWithEnrollment(lnParent, false)
+        }
+    }
+
+    private fun proceedWithEnrollment(lnParent: LinearLayout, isEnrolled: Boolean) {
+        if (isEnrolled) {
+            val enroll = FormatterClass().getSharedPref(
+                "enrollment_id",
+                this@PatientRegistrationActivity
+            )
             val dataUser = SyncStatusHelper.getSingleEnrollment(enroll)
-            Log.e("TAG", "Enrollment Found $dataUser")
             val user = SyncStatusHelper.getTrackedEntity(dataUser.trackedEntityInstance())
             if (user != null) {
                 Log.e("TAG", "Enrollment Found Tracked $user")
                 populateViews(lnParent, user)
             }
+        } else {
+            createNewTrackedEntity()
+        }
+
+    }
+
+    private fun createNewTrackedEntity() {
+        val date = FormatterClass().getSharedPref("event_date", this)
+        val orgUnitUid = FormatterClass().getSharedPref("event_organization", this)
+        val trackedEntityTypeUid = FormatterClass().getSharedPref(PROGRAM_TRACKED_UUID, this)
+        val programUid = FormatterClass().getSharedPref(PROGRAM_UUID, this)
+        if (date != null && orgUnitUid != null && trackedEntityTypeUid != null && programUid != null) {
+            val eventBuilder = TrackedEntityInstanceCreateProjection.builder()
+                .organisationUnit(orgUnitUid)
+                .trackedEntityType(trackedEntityTypeUid)
+                .build()
+            // Create the empty event
+            val eventUid = d2().trackedEntityModule().trackedEntityInstances()
+                .blockingAdd(eventBuilder)
+            d2().trackedEntityModule().trackedEntityInstances().uid(eventUid).apply {
+
+
+                val enrollmentBuilder = EnrollmentCreateProjection.builder()
+                    .trackedEntityInstance(eventUid)
+                    .program(programUid)
+                    .organisationUnit(orgUnitUid)
+                    .build()
+                // Create the empty event
+                val enrollmentUid = d2().enrollmentModule().enrollments()
+                    .blockingAdd(enrollmentBuilder)
+                d2().enrollmentModule().enrollments().uid(enrollmentUid).apply {
+                    setEnrollmentDate(FormatterClass().parseEventDate(date))
+                    setFollowUp(false)
+                    setIncidentDate(FormatterClass().parseEventDate(date))
+                    FormatterClass().saveSharedPref(
+                        "enrollment_id",
+                        enrollmentUid,
+                        this@PatientRegistrationActivity
+                    )
+                    ActivityStarter.startActivity(
+                        this@PatientRegistrationActivity,
+                        MainActivity.getRegistrationActivityIntent(this@PatientRegistrationActivity),
+                        true
+                    )
+
+                }
+            }
+        } else {
+            Toast.makeText(this, "Please check input data", Toast.LENGTH_SHORT).show()
+        }
+
+
+    }
+
+    private fun initialPatientEnrollment(instanceUid: String, programUid: String, orgUnit: String) {
+        try {
+            val eventBuilder = EnrollmentCreateProjection.builder()
+                .trackedEntityInstance(instanceUid)
+                .program(programUid)
+                .organisationUnit(orgUnit)
+                .build()
+            // Create the empty event
+            val eventUid = d2().enrollmentModule().enrollments()
+                .blockingAdd(eventBuilder)
+            d2().enrollmentModule().enrollments().uid(eventUid).apply {
+
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
-    private fun populateViews(lnParent: LinearLayout, user: TrackedEntityInstance) {
+    private fun populateViews(lnParent: LinearLayout, user: TrackedEntityInstance?) {
         val trackedEntity = SyncStatusHelper.trackedEntityAttributes()
         var totalCount = 0
         var doneCount = 0
@@ -84,12 +175,14 @@ class PatientRegistrationActivity : AppCompatActivity() {
                         tvName.text = it.displayName()
                         tvElement.text = it.uid()
                         lnParent.addView(itemView)
-                        editText.setText(
-                            extractUserInput(
-                                it.uid(),
-                                user.trackedEntityAttributeValues()
+                        if (user != null) {
+                            editText.setText(
+                                extractUserInput(
+                                    it.uid(),
+                                    user.trackedEntityAttributeValues()
+                                )
                             )
-                        )
+                        }
                         editText.apply {
                             addTextChangedListener(object : TextWatcher {
                                 override fun beforeTextChanged(
@@ -109,6 +202,13 @@ class PatientRegistrationActivity : AppCompatActivity() {
                                 ) {
                                     if (s != null) {
                                         inputFieldMap[it.uid()] = s.toString()
+                                        if (user != null) {
+                                            updateTrackedEntityAttribute(
+                                                user.uid(),
+                                                it.uid(),
+                                                s.toString()
+                                            )
+                                        }
                                     }
                                 }
 
@@ -136,16 +236,19 @@ class PatientRegistrationActivity : AppCompatActivity() {
                     val editText = itemView.findViewById<TextInputEditText>(R.id.editText)
                     tvName.text = it.displayName()
                     tvElement.text = it.uid()
-                    val value = extractUserInput(
-                        it.uid(),
-                        user.trackedEntityAttributeValues()
-                    )
-                    inputFieldMap[it.uid()] = value
+                    if (user != null) {
+                        val value = extractUserInput(
+                            it.uid(),
+                            user.trackedEntityAttributeValues()
+                        )
+                        inputFieldMap[it.uid()] = value
+                        editText.setText(value)
+                    }
                     val keywords = listOf("Birth", "Death")
                     val max = AppUtils().containsAnyKeyword(it.displayName().toString(), keywords)
                     AppUtils().disableTextInputEditText(editText)
                     editText.apply {
-                        setText(value)
+
                         setOnClickListener {
                             AppUtils().showDatePickerDialog(
                                 context, editText, setMaxNow = max, setMinNow = false
@@ -170,6 +273,7 @@ class PatientRegistrationActivity : AppCompatActivity() {
                             ) {
                                 if (s != null) {
                                     inputFieldMap[it.uid()] = s.toString()
+
                                 }
                             }
 
@@ -193,11 +297,13 @@ class PatientRegistrationActivity : AppCompatActivity() {
                     val radioButtonYes = itemView.findViewById<RadioButton>(R.id.radioButtonYes)
                     val radioButtonNo = itemView.findViewById<RadioButton>(R.id.radioButtonNo)
                     tvName.text = it.displayName()
-                    val value = extractUserInput(
-                        it.uid(),
-                        user.trackedEntityAttributeValues()
-                    )
-                    inputFieldMap[it.uid()] = value
+                    if (user != null) {
+                        val value = extractUserInput(
+                            it.uid(),
+                            user.trackedEntityAttributeValues()
+                        )
+                        inputFieldMap[it.uid()] = value
+                    }
 
                     radioButtonNo.apply {
                         setOnCheckedChangeListener { button, isChecked ->
@@ -232,12 +338,13 @@ class PatientRegistrationActivity : AppCompatActivity() {
                     val editText = itemView.findViewById<TextInputEditText>(R.id.editText)
                     tvName.text = it.displayName()
                     tvElement.text = it.uid()
-                    val value = extractUserInput(
-                        it.uid(),
-                        user.trackedEntityAttributeValues()
-                    )
-                    inputFieldMap[it.uid()] = value
-
+                    if (user != null) {
+                        val value = extractUserInput(
+                            it.uid(),
+                            user.trackedEntityAttributeValues()
+                        )
+                        inputFieldMap[it.uid()] = value
+                    }
                     editText.apply {
                         addTextChangedListener(object : TextWatcher {
                             override fun beforeTextChanged(
@@ -285,11 +392,14 @@ class PatientRegistrationActivity : AppCompatActivity() {
                     val editText = itemView.findViewById<TextInputEditText>(R.id.editText)
                     tvName.text = it.displayName()
                     tvElement.text = it.uid()
-                    val value = extractUserInput(
-                        it.uid(),
-                        user.trackedEntityAttributeValues()
-                    )
-                    inputFieldMap[it.uid()] = value
+                    if (user != null) {
+                        val value = extractUserInput(
+                            it.uid(),
+                            user.trackedEntityAttributeValues()
+                        )
+                        inputFieldMap[it.uid()] = value
+                        editText.setText(value)
+                    }
 
                     editText.apply {
                         addTextChangedListener(object : TextWatcher {
@@ -338,11 +448,14 @@ class PatientRegistrationActivity : AppCompatActivity() {
                     val editText = itemView.findViewById<TextInputEditText>(R.id.editText)
                     tvName.text = it.displayName()
                     tvElement.text = it.uid()
-                    val value = extractUserInput(
-                        it.uid(),
-                        user.trackedEntityAttributeValues()
-                    )
-                    inputFieldMap[it.uid()] = value
+                    if (user != null) {
+                        val value = extractUserInput(
+                            it.uid(),
+                            user.trackedEntityAttributeValues()
+                        )
+                        inputFieldMap[it.uid()] = value
+                        editText.setText(value)
+                    }
                     editText.apply {
                         addTextChangedListener(object : TextWatcher {
                             override fun beforeTextChanged(
@@ -385,13 +498,15 @@ class PatientRegistrationActivity : AppCompatActivity() {
                     val checkBox = itemView.findViewById<CheckBox>(R.id.checkBox)
                     val tvName = itemView.findViewById<TextView>(R.id.tv_name)
                     tvName.text = it.displayName()
-                    val value = extractUserInput(
-                        it.uid(),
-                        user.trackedEntityAttributeValues()
-                    )
-                    inputFieldMap[it.uid()] = value
-                    if (value == "true") {
-                        checkBox.isChecked = true
+                    if (user != null) {
+                        val value = extractUserInput(
+                            it.uid(),
+                            user.trackedEntityAttributeValues()
+                        )
+                        inputFieldMap[it.uid()] = value
+                        if (value == "true") {
+                            checkBox.isChecked = true
+                        }
                     }
                     checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
                         if (isChecked) {
@@ -419,12 +534,15 @@ class PatientRegistrationActivity : AppCompatActivity() {
                     val editText = itemView.findViewById<TextInputEditText>(R.id.editText)
                     tvName.text = it.displayName()
                     tvElement.text = it.uid()
+                    if (user != null) {
+                        val value = extractUserInput(
+                            it.uid(),
+                            user.trackedEntityAttributeValues()
+                        )
+                        editText.setText(value)
 
-                    val value = extractUserInput(
-                        it.uid(),
-                        user.trackedEntityAttributeValues()
-                    )
-                    inputFieldMap[it.uid()] = value
+                        inputFieldMap[it.uid()] = value
+                    }
                     editText.apply {
                         addTextChangedListener(object : TextWatcher {
                             override fun beforeTextChanged(
@@ -508,10 +626,22 @@ class PatientRegistrationActivity : AppCompatActivity() {
                 else -> {}
             }
         }
-        user.trackedEntityAttributeValues()?.forEach {
-            doneCount++
+        if (user != null) {
+            user.trackedEntityAttributeValues()?.forEach {
+                doneCount++
+            }
         }
         updateProgress(doneCount, totalCount)
+    }
+
+    private fun updateTrackedEntityAttribute(uid: String, attribute: String, value: String) {
+        d2().trackedEntityModule().trackedEntityInstances().uid(uid).apply {
+            Log.e("TAG", "Tracked Details Update $uid\nAttribute $attribute\nValue $value")
+            d2().trackedEntityModule().trackedEntityAttributeValues().value(attribute, uid)
+                .set(value)
+
+
+        }
     }
 
     private fun extractUserInput(

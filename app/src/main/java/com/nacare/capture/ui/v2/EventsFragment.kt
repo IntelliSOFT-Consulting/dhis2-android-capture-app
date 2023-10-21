@@ -1,6 +1,7 @@
 package com.nacare.capture.ui.v2
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +25,7 @@ import com.nacare.capture.data.service.SyncStatusHelper
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.nacare.capture.data.Constants
 import com.nacare.capture.data.Constants.FACILITY_PROGRAM_UUID
+import com.nacare.capture.data.Constants.PROGRAM_TRACKED_UUID
 import com.nacare.capture.models.CodeValue
 import com.nacare.capture.ui.v2.filters.FilterBottomSheetFragment
 import com.nacare.capture.ui.v2.filters.FilterBottomSheetListener
@@ -78,15 +81,54 @@ class EventsFragment : Fragment(), FilterBottomSheetListener {
     }
 
     private fun loadActiveEnrollments(s: String) {
-        if (s == "ALL") {
-            eventList = SyncStatusHelper.getAllEnrolments()
-        } else if (s == "draft") {
-            eventList.filter { it.status()!!.name == "TO_UPLOAD" }
+        var eventFilterList = mutableListOf<Enrollment>()
+        eventList = SyncStatusHelper.getAllEnrolments()
+        when (s) {
+            "ALL" -> {
+                eventFilterList = eventList
+            }
+
+            "draft" -> {
+                eventFilterList.clear()
+                eventList.forEach {
+                    if (it.syncState()!!.name == "TO_UPLOAD") {
+                        eventFilterList.add(it)
+                    }
+                }
+            }
+
+            "not synced" -> {
+                eventFilterList.clear()
+                eventList.forEach {
+                    if (it.syncState()!!.name == "TO_UPLOAD") {
+                        eventFilterList.add(it)
+                    }
+                }
+            }
+
+            "completed" -> {
+                eventFilterList.clear()
+                eventList.forEach {
+                    if (it.syncState()!!.name == "SYNCED") {
+                        eventFilterList.add(it)
+                    }
+                }
+            }
+
+            "duplicates" -> {
+                eventFilterList.clear()
+                eventList.forEach {
+                    if (it.syncState()!!.name == "DUPLICATE") {
+                        eventFilterList.add(it)
+                    }
+                }
+            }
         }
+
         mRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             val eventAdapter =
-                EventAdapter(requireContext(), eventList, this@EventsFragment::handleClick)
+                EventAdapter(requireContext(), eventFilterList, this@EventsFragment::handleClick)
             adapter = eventAdapter
             eventAdapter.notifyDataSetChanged()
 
@@ -141,8 +183,39 @@ class EventsFragment : Fragment(), FilterBottomSheetListener {
     }
 
     private fun createANewEvent() {
+//       eventEnrollment()
         FormatterClass().deleteSharedPref("enrollment_id", requireContext())
         startActivity(Intent(requireContext(), RegistryActivity::class.java))
+    }
+
+    private fun eventEnrollment() {
+        val date = FormatterClass().getSharedPref(
+            "event_date",
+            requireContext()
+        )
+        val org = FormatterClass().getSharedPref(
+            "event_organization",
+            requireContext()
+        )
+        val programUid = FormatterClass().getSharedPref(PROGRAM_UUID, requireContext())
+        if (date != null && org != null && programUid != null) {
+            Log.e("TAG", "Retrieved $org")
+            Log.e("TAG", "Retrieved $programUid")
+            val eventBuilder = EnrollmentCreateProjection.builder()
+                .trackedEntityInstance("oSrCt5azNKG")
+                .program(programUid)
+                .organisationUnit(org)
+                .build()
+            // Create the empty event
+            val eventUid = Sdk.d2().enrollmentModule().enrollments()
+                .blockingAdd(eventBuilder)
+            Sdk.d2().enrollmentModule().enrollments().uid(eventUid).apply {
+                setEnrollmentDate(FormatterClass().parseEventDate(date))
+                setFollowUp(false)
+                setIncidentDate(FormatterClass().parseEventDate(date))
+            }
+
+        }
     }
 
     override fun onResume() {
@@ -157,13 +230,19 @@ class EventsFragment : Fragment(), FilterBottomSheetListener {
             val notification =
                 programs.find { it.name() == "The National Cancer Registry of Kenya Notification Form" }
             if (notification != null) {
-                Log.e("TAG", "Retrieved Programs ${notification.uid()}")
+
                 FormatterClass().saveSharedPref(PROGRAM_UUID, notification.uid(), requireContext())
+                if (notification.trackedEntityType() != null) {
+                    FormatterClass().saveSharedPref(
+                        PROGRAM_TRACKED_UUID,
+                        notification.trackedEntityType()!!.uid(),
+                        requireContext()
+                    )
+                }
             }
             val fac =
                 programs.find { it.name() == " Facility Details Capture Tool" }
             if (fac != null) {
-                Log.e("TAG", "Retrieved Programs ${fac.uid()}")
                 FormatterClass().saveSharedPref(FACILITY_PROGRAM_UUID, fac.uid(), requireContext())
             }
         }
@@ -173,12 +252,32 @@ class EventsFragment : Fragment(), FilterBottomSheetListener {
         loadActiveEnrollments(status)
     }
 
-    override fun onDateClick() {
-        TODO("Not yet implemented")
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onDateClick(date: String) {
+        Log.e("TAG", "Selected Date $date")
+        when (date) {
+
+            "Today" -> {
+                val today = FormatterClass().getCurrentDate()
+            }
+
+            "Yesterday" -> {}
+            "Tomorrow" -> {}
+            "This Week" -> {}
+            "Last Week" -> {}
+            "Next Week" -> {}
+            "This Month" -> {}
+            "Last Month" -> {}
+            "Next Month" -> {}
+            "From To" -> {}
+            "Other" -> {}
+            "Anytime" -> {}
+        }
+
     }
 
     override fun onDateRangeClicked() {
-        TODO("Not yet implemented")
+
     }
 
 

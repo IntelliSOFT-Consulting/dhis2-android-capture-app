@@ -20,6 +20,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.nacare.capture.data.service.SyncStatusHelper
 import com.nacare.capture.models.CodeValue
 import org.hisp.dhis.android.core.common.ValueType
+import org.hisp.dhis.android.core.trackedentity.TrackedEntityInstance
 
 
 class PatientSearchActivity : AppCompatActivity() {
@@ -75,36 +76,6 @@ class PatientSearchActivity : AppCompatActivity() {
                         inputFieldMap[it.uid()] = editText
                         lnParent.addView(itemView)
                     }
-                /*else {
-                        val itemView = layoutInflater.inflate(
-                            R.layout.item_autocomplete,
-                            lnParent,
-                            false
-                        ) as LinearLayout
-                        val optionsList: MutableList<String> = mutableListOf()
-                        val adp = ArrayAdapter(
-                            this@PatientSearchActivity,
-                            android.R.layout.simple_list_item_1,
-                            optionsList
-                        )
-                        val tvName = itemView.findViewById<TextView>(R.id.tv_name)
-                        val tvElement = itemView.findViewById<TextView>(R.id.tv_element)
-                        val textInputLayout =
-                            itemView.findViewById<TextInputLayout>(R.id.textInputLayout)
-                        val autoCompleteTextView =
-                            itemView.findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)
-                        val op = SyncStatusHelper().getDataElementOptions(it.optionSetUid())
-
-                        tvElement.text = it.uid()
-                        optionsList.clear()
-                        op.forEach {
-                            optionsList.add(it.displayName().toString())
-                        }
-                        tvName.text = it.displayName()
-                        autoCompleteTextView.setAdapter(adp)
-                        adp.notifyDataSetChanged()
-                        lnParent.addView(itemView)
-                    }*/
                 }
 
                 else -> {}
@@ -122,7 +93,7 @@ class PatientSearchActivity : AppCompatActivity() {
                     val input = view.text.toString()
                     if (input.isNotEmpty()) {
                         val dt = CodeValue(
-                            code = id,
+                            attributeUid = id,
                             value = input
                         )
                         collectedInputs.add(dt)
@@ -133,12 +104,42 @@ class PatientSearchActivity : AppCompatActivity() {
         }
         if (collectedInputs.size > 0) {
 
-            val patient = SyncStatusHelper.trackedEntityInstanceList()
-            if (patient.isNotEmpty()) {
-                Log.e("TAG", "Patients Found $patient")
-                Log.e("TAG", "Patients Found $collectedInputs")
-                startActivity(Intent(this@PatientSearchActivity,PatientListActivity::class.java))
-                this@PatientSearchActivity.finish()
+            val patients = SyncStatusHelper.trackedEntityInstanceList()
+            if (patients.isNotEmpty()) {
+                val filteredPatients = mutableListOf<TrackedEntityInstance>()
+                patients.forEach { patient ->
+
+                    val attributes = patient.trackedEntityAttributeValues()
+                    Log.e("TAG", "Patients Found Attributes $attributes")
+                    attributes?.forEach { attributeValue ->
+                        val entity = attributeValue.trackedEntityAttribute()
+                        val value = attributeValue.value()
+
+                        // Replace "yourFilterKey" with the actual filter key you want to use
+                        val collectedInput = collectedInputs.find { it.attributeUid == entity }
+                        if (value != null) {
+                            if (collectedInput != null && value.contains(collectedInput.value)) {
+
+                                filteredPatients.add(patient)
+                            }
+                        }
+                    }
+                }
+
+                if (filteredPatients.isNotEmpty()) {
+                    val intent = Intent(
+                        this@PatientSearchActivity,
+                        PatientListActivity::class.java
+                    )
+                    intent.putParcelableArrayListExtra(
+                        "collectedInputs",
+                        ArrayList(collectedInputs)
+                    )
+                    startActivity(intent)
+                    this@PatientSearchActivity.finish()
+                } else {
+                    showNoPatientFound()
+                }
 
             } else {
                 showNoPatientFound()

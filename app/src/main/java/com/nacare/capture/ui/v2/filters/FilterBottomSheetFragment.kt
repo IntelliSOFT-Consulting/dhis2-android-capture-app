@@ -10,9 +10,11 @@ import android.widget.RadioButton
 import android.widget.TextView
 import com.example.android.androidskeletonapp.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.nacare.capture.data.FormatterClass
 
 class FilterBottomSheetFragment : BottomSheetDialogFragment() {
     private var listener: FilterBottomSheetListener? = null
+    var selectedRadioText: String? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,7 +41,12 @@ class FilterBottomSheetFragment : BottomSheetDialogFragment() {
                             otherRadioButton.isChecked = false
                         }
                     }
+                    selectedRadioText = childView.text.toString()
+
+                    listener?.onDateClick(selectedRadioText.toString())
+                    dismiss()
                 }
+
             }
         }
         tvDate.setOnClickListener {

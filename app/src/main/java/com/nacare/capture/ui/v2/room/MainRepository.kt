@@ -1,6 +1,6 @@
-package com.nacare.capture.ui.v2.live.room
-
+package com.nacare.capture.ui.v2.room
 import android.content.Context
+import com.google.gson.Gson
 import com.nacare.capture.data.FormatterClass
 
 class MainRepository(private val roomDao: RoomDao) {

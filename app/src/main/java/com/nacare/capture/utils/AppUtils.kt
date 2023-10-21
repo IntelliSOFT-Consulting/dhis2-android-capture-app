@@ -11,6 +11,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.androidskeletonapp.R
 import com.google.android.material.textfield.TextInputEditText
+import com.nacare.capture.models.CountyUnit
+import com.nacare.capture.models.OrgTreeNode
 import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -27,7 +29,7 @@ class AppUtils {
     fun showNoOrgUnits(context: Context) {
         val builder = AlertDialog.Builder(context)
         builder.setTitle("No Organization Units")
-            .setMessage("There are not organization units, pleas try again later!!")
+            .setMessage("There are no organization units, pleas try again later!!")
             .setPositiveButton("Okay") { dialog, _ ->
                 dialog.dismiss()
             }
@@ -36,6 +38,21 @@ class AppUtils {
             }
             .show()
 
+    }
+
+    fun generateChild(children: List<CountyUnit>): List<OrgTreeNode> {
+        val treeNodes = mutableListOf<OrgTreeNode>()
+        for (ch in children) {
+            val orgNode = OrgTreeNode(
+                label = ch.name,
+                code = ch.id,
+                children = generateChild(ch.children)
+            )
+            treeNodes.add(orgNode)
+
+        }
+
+        return treeNodes.sortedBy { it.label }
     }
 
     fun noConnection(context: Context) {
@@ -51,7 +68,7 @@ class AppUtils {
             .show()
     }
 
-    fun  isOnline(context: Context): Boolean {
+    fun isOnline(context: Context): Boolean {
         var isOnline = false
         try {
             val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -109,7 +126,6 @@ class AppUtils {
             DatePickerDialog(
                 context,
                 { _: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int ->
-//                    val selectedDate =                        String.format("%02d/%02d/%04d", dayOfMonth, monthOfYear + 1, year)
                     val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                     val selectedDate = dateFormat.format(Date(year - 1900, monthOfYear, dayOfMonth))
 
@@ -139,5 +155,65 @@ class AppUtils {
         }
 
     }
+
+    fun generateIcons(context: Context, iconName: String): Int {
+        val iconDrawableMap = mapOf(
+            "add" to R.drawable.add,
+            "arrow_down" to R.drawable.arrowdown,
+            "back" to R.drawable.back,
+            "Cancer Information" to R.drawable.cancerinfo,
+            "capture" to R.drawable.capture,
+            "cleaner" to R.drawable.cleaner,
+            "Comorbidities" to R.drawable.comorbidities,
+            "completed_doc" to R.drawable.completeddoc,
+            "dashb" to R.drawable.dashb,
+            "Discrimination" to R.drawable.discrimination,
+            "editdoc" to R.drawable.editdoc,
+            "edit_form" to R.drawable.editform,
+            "event_note_FILL0_wght400_GRAD0_opsz24" to R.drawable.event_note,
+            "event_vis" to R.drawable.eventvis,
+            "ev_viz_2" to R.drawable.evviz2,
+            "expand" to R.drawable.expand,
+            "facility" to R.drawable.facility,
+            "facility_2" to R.drawable.facility2,
+            "facility_cap" to R.drawable.facilitycap,
+            "filter" to R.drawable.filter,
+            "follow_up" to R.drawable.followup,
+            "follow_upp" to R.drawable.followupp,
+            "form" to R.drawable.form,
+            "form_complete" to R.drawable.formcomplete,
+            "helpdesk" to R.drawable.helpdesk,
+            "info" to R.drawable.info,
+            "interp" to R.drawable.interp,
+            "key" to R.drawable.key,
+            "maps" to R.drawable.maps,
+            "menu" to R.drawable.menu,
+            "menu_management" to R.drawable.menumanagement,
+            "more" to R.drawable.more,
+            "nci_form" to R.drawable.nciform,
+            "next_next" to R.drawable.nextnext,
+            "next_page" to R.drawable.nextpage,
+            "Patient Details" to R.drawable.patientdetails,
+            "Patient Status" to R.drawable.patientstatus,
+            "Post-cancer Treatment Rehabilitation" to R.drawable.posttreatment,
+            "remove_FILL0_wght400_GRAD0_opsz24" to R.drawable.remove_,
+            "risk" to R.drawable.risk,
+            "Risk Factors" to R.drawable.risk2,
+            "save" to R.drawable.save,
+            "search" to R.drawable.search,
+            "settings" to R.drawable.settings,
+            "star" to R.drawable.star,
+            "Survivorship" to R.drawable.survivorship,
+            "sync" to R.drawable.sync,
+            "synccc" to R.drawable.synccc,
+            "Treatment" to R.drawable.treatment
+        )
+
+        return iconDrawableMap[iconName]
+            ?: throw IllegalArgumentException("Icon not found: $iconName")
+
+
+    }
+
 
 }

@@ -1,4 +1,4 @@
-package com.nacare.capture.ui.v2.live.room
+package com.nacare.capture.ui.v2.room
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -19,7 +19,9 @@ interface RoomDao {
     @Query("SELECT * FROM organizations ORDER BY id DESC")
     fun loadOrganizations(): List<OrganizationData>?
 
+
     @Query("UPDATE organizations SET children =:children WHERE  code =:code")
     fun updateChildOrgUnits(code: String, children: String)
+
 
 }

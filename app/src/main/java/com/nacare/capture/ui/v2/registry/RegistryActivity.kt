@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,14 +27,18 @@ import org.hisp.dhis.android.core.event.EventStatus
 import org.hisp.dhis.android.core.program.ProgramStageSection
 
 class RegistryActivity : AppCompatActivity() {
-
+    private var overallDone = 0
+    private var overallTotal = 0
+    private lateinit var progressBar: ProgressBar
+    private lateinit var progressTextView: TextView
     private val dataList: MutableList<ProgramCategory> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registry)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-
+        progressBar = findViewById(R.id.progress_bar)
+        progressTextView = findViewById(R.id.text_view_progress)
         findViewById<TextView>(R.id.tv_title).apply {
             text = "The National Cancer Registry of Kenya Notification Form"
         }
@@ -47,6 +52,10 @@ class RegistryActivity : AppCompatActivity() {
                 )
             }
         }
+        findViewById<TextView>(R.id.progressTextView).apply {
+            text = getPatientProgress()
+        }
+
         findViewById<MaterialCardView>(R.id.patientCardView).apply {
             setOnClickListener {
                 val enroll = FormatterClass().getSharedPref(
@@ -111,29 +120,57 @@ class RegistryActivity : AppCompatActivity() {
                         )
                     adapter = eventAdapter
                 }
+            computeAndDisplayTotalScore(overallDone, overallTotal)
 
         }
+    }
+
+    private fun computeAndDisplayTotalScore(overallDone: Int, overallTotal: Int) {
+
+        val percent = if (overallTotal != 0) {
+            (overallDone.toDouble() / overallTotal.toDouble()) * 100
+        } else {
+            0.0 // handle division by zero if necessary
+        }
+
+        progressBar.progress = percent.toInt()
+        progressTextView.text = "${percent.toInt()}%"
+
+
+    }
+
+    private fun getPatientProgress(): String {
+        var done = 0
+        var total = 0
+        val trackedEntity = SyncStatusHelper.trackedEntityAttributes()
+        trackedEntity.forEach {
+            total++
+        }
+        overallTotal += total
+        overallDone += done
+        return "$done/$total"
+
     }
 
     private fun retrieveTotalDataElementValues(
         program: String,
         stage: List<ProgramStageSection>
     ): String {
-        var total = 0
+        var done = 0
         val enroll = FormatterClass().getSharedPref(
             "enrollment_id",
             this@RegistryActivity
         )
         if (enroll != null) {
             val singleEvent = SyncStatusHelper.getEventsPerEnrollment(program, enroll)
-            Log.e("TAG", "Tracked Entity View Stage $program")
-            Log.e("TAG", "Tracked Entity View Events $singleEvent")
             if (singleEvent != null) {
                 val attributes = SyncStatusHelper.getEventAttribute(singleEvent.uid())
                 Log.e("TAG", "Tracked Entity View Attributes $attributes")
             }
         }
-        return "$total"
+        overallDone += done
+
+        return "$done"
 
     }
 
@@ -146,6 +183,7 @@ class RegistryActivity : AppCompatActivity() {
                 }
             }
         }
+        overallTotal += total
         return "$total"
 
     }
@@ -164,6 +202,10 @@ class RegistryActivity : AppCompatActivity() {
             this@RegistryActivity
         )
         if (enroll != null) {
+            FormatterClass().saveSharedPref(
+                "section_name", data.name,
+                this@RegistryActivity
+            )
             FormatterClass().saveSharedPref(
                 "section_id", data.id,
                 this@RegistryActivity

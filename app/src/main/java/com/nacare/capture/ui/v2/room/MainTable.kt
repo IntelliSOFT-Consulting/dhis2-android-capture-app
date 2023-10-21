@@ -1,5 +1,4 @@
-package com.nacare.capture.ui.v2.live.room
-
+package com.nacare.capture.ui.v2.room
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -20,5 +19,4 @@ data class OrganizationData(
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null
 }
-
 

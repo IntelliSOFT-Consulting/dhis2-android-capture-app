@@ -32,6 +32,13 @@ class ResponderActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         val lnParent = findViewById<LinearLayout>(R.id.ln_parent)
+        findViewById<TextView>(R.id.tv_title).apply {
+            val name = FormatterClass().getSharedPref(
+                "section_name",
+                this@ResponderActivity
+            )
+            text = name
+        }
         val section = FormatterClass().getSharedPref(
             "section_id",
             this@ResponderActivity
@@ -68,8 +75,7 @@ class ResponderActivity : AppCompatActivity() {
                     tvElement.text = it.uid()
                     lnParent.addView(itemView)
 
-                }
-                else {
+                } else {
                     val itemView = layoutInflater.inflate(
                         R.layout.item_autocomplete,
                         lnParent,

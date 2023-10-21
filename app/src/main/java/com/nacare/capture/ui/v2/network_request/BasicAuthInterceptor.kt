@@ -1,5 +1,4 @@
-package com.nacare.capture.ui.v2.live
-
+package com.nacare.capture.ui.v2.network_request
 
 import android.util.Base64
 import okhttp3.Interceptor

@@ -4,7 +4,10 @@ package com.nacare.capture.data.service;
 import static org.hisp.dhis.android.core.arch.repositories.scope.RepositoryScope.OrderByDirection.ASC;
 import static org.hisp.dhis.android.core.arch.repositories.scope.RepositoryScope.OrderByDirection.DESC;
 
+import android.database.Observable;
 import android.os.Build;
+
+import androidx.annotation.NonNull;
 
 import com.nacare.capture.models.CodeValue;
 import com.nacare.capture.models.EventWithOrganization;
@@ -16,6 +19,7 @@ import org.hisp.dhis.android.core.common.State;
 import org.hisp.dhis.android.core.dataelement.DataElement;
 import org.hisp.dhis.android.core.datavalue.DataValue;
 import org.hisp.dhis.android.core.enrollment.Enrollment;
+import org.hisp.dhis.android.core.enrollment.EnrollmentCreateProjection;
 import org.hisp.dhis.android.core.enrollment.EnrollmentStatus;
 import org.hisp.dhis.android.core.event.Event;
 import org.hisp.dhis.android.core.event.EventCreateProjection;
@@ -29,6 +33,7 @@ import org.hisp.dhis.android.core.program.ProgramStageDataElement;
 import org.hisp.dhis.android.core.program.ProgramStageSection;
 import org.hisp.dhis.android.core.trackedentity.AttributeValueFilter;
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityAttribute;
+import org.hisp.dhis.android.core.trackedentity.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityDataValue;
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityInstance;
 import org.jetbrains.annotations.NotNull;
@@ -36,6 +41,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 public class SyncStatusHelper {
@@ -47,10 +53,20 @@ public class SyncStatusHelper {
     public static List<Program> programList() {
         return Sdk.d2().programModule()
                 .programs()
+                .withTrackedEntityType()
                 .get()
                 .blockingGet();
     }
 
+    public static void saveToEnroll(@NonNull String orgUnit, @NonNull String programUid, @NonNull String teiUid, Date enrollmentDate) {
+        Sdk.d2().enrollmentModule().enrollments().add(
+                EnrollmentCreateProjection.builder()
+                        .organisationUnit(orgUnit)
+                        .program(programUid)
+                        .trackedEntityInstance(teiUid)
+                        .build());
+
+    }
 
     public static Program singleProgram(String programUid) {
 
@@ -89,6 +105,14 @@ public class SyncStatusHelper {
                 .orderByLastUpdated(DESC)
                 .orderByCreatedAtClient(DESC)
                 .one()
+                .blockingGet();
+    }
+
+    public static List<TrackedEntityAttributeValue> getTrackedEntityValue(String attributeUid, String instanceUid) {
+        return Sdk.d2().trackedEntityModule().trackedEntityAttributeValues()
+                .byTrackedEntityAttribute().eq(attributeUid)
+                .byTrackedEntityInstance().eq(instanceUid)
+                .get()
                 .blockingGet();
     }
 
@@ -162,32 +186,6 @@ public class SyncStatusHelper {
     }
 
 
-    public static List<EventWithOrganization> getAllEventsWithOrganizations() {
-        List<Event> events = Sdk.d2().eventModule().events()
-                .byEnrollmentUid().isNull()
-                .blockingGet();
-
-        List<EventWithOrganization> eventsWithOrganizations = new ArrayList<>();
-
-        for (Event event : events) {
-            String enrollmentUid = event.enrollment();
-            if (enrollmentUid != null) {
-                Enrollment enrollment = Sdk.d2().enrollmentModule().enrollments()
-                        .uid(enrollmentUid)
-                        .blockingGet();
-
-                String organizationUid = enrollment.organisationUnit();
-                // Fetch organization details using the organization UID
-                OrganisationUnit organizationUnit = Sdk.d2().organisationUnitModule().organisationUnits()
-                        .uid(organizationUid)
-                        .blockingGet();
-
-                eventsWithOrganizations.add(new EventWithOrganization(event, organizationUnit));
-            }
-        }
-
-        return eventsWithOrganizations;
-    }
 
     public List<ProgramStage> getProgramStagesForProgram(String programUid) {
         try {
@@ -281,6 +279,7 @@ public class SyncStatusHelper {
                 .withNotes()
                 .one().blockingGet();
     }
+
     public static List<OrganisationUnit> loadOrganizations() {
         return Sdk.d2().organisationUnitModule()
                 .organisationUnits()

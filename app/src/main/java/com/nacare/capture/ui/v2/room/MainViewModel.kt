@@ -1,5 +1,4 @@
-package com.nacare.capture.ui.v2.live.room
-
+package com.nacare.capture.ui.v2.room
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel

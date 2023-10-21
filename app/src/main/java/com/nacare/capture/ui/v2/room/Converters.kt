@@ -1,4 +1,4 @@
-package com.nacare.capture.ui.v2.live.room
+package com.nacare.capture.ui.v2.room
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
@@ -23,7 +23,6 @@ class Converters {
     fun toJsonOrganization(data: OrganizationResponse): String {
         return gson.toJson(data)
     }
-
     fun toJsonOrgUnit(data: OrganizationUnitResponse): String {
         return gson.toJson(data)
     }
@@ -34,9 +33,5 @@ class Converters {
         return gson.fromJson(json, OrganizationUnitResponse::class.java)
 
     }
-
-  /*  fun toJsonPatientSearch(data: SearchPatientResponse): String {
-        return gson.toJson(data)
-    }*/
 
 }

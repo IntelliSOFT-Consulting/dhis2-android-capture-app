@@ -1,5 +1,7 @@
 package com.nacare.capture.ui.main;
 
+import static kotlinx.coroutines.CoroutineScopeKt.CoroutineScope;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -26,13 +28,17 @@ import com.nacare.capture.ui.v2.ProgramsFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.nacare.capture.data.service.LogOutService;
-import com.nacare.capture.ui.v2.live.RetrofitCalls;
+import com.nacare.capture.ui.v2.network_request.RetrofitCalls;
+import com.nacare.capture.ui.v2.patients.PatientRegistrationActivity;
 import com.nacare.capture.utils.AppUtils;
 
 import org.hisp.dhis.android.core.arch.call.D2Progress;
 import org.hisp.dhis.android.core.domain.aggregated.data.AggregatedD2Progress;
 import org.hisp.dhis.android.core.tracker.exporter.TrackerD2Progress;
 import org.hisp.dhis.android.core.user.User;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -49,11 +55,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ProgressBar progressBar;
 
     private boolean isSyncing = false;
-    private RetrofitCalls retrofitCalls = new RetrofitCalls();
 
+
+    private RetrofitCalls retrofitCalls = new RetrofitCalls();
 
     public static Intent getMainActivityIntent(Context context) {
         return new Intent(context, MainActivity.class);
+    }
+
+    public static Intent getRegistrationActivityIntent(Context context) {
+        return new Intent(context, PatientRegistrationActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 
 
@@ -72,11 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (savedInstanceState == null) {
             loadFragment(new ProgramsFragment());
         }
-//        if (new AppUtils().isOnline(this))
-//            retrofitCalls.loadOrganization(this);
-    }
-
-    private void loadOrganization() {
+        retrofitCalls.loadOrganization(this);
 
     }
 
