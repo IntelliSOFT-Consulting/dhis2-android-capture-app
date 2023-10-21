@@ -4,6 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -21,6 +24,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.nacare.capture.data.Constants
 import com.nacare.capture.data.Constants.FACILITY_PROGRAM_UUID
 import com.nacare.capture.models.CodeValue
+import com.nacare.capture.ui.v2.filters.FilterBottomSheetFragment
+import com.nacare.capture.ui.v2.filters.FilterBottomSheetListener
 import com.nacare.capture.ui.v2.registry.RegistryActivity
 import com.nacare.capture.utils.AppUtils
 import org.hisp.dhis.android.core.enrollment.Enrollment
@@ -39,9 +44,10 @@ private const val ARG_PARAM2 = "param2"
  * Use the [EventsFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class EventsFragment : Fragment() {
+class EventsFragment : Fragment(), FilterBottomSheetListener {
 
     private var eventList = mutableListOf<Enrollment>()
+    private lateinit var mRecyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +55,7 @@ class EventsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_events, container, false)
-        eventList = SyncStatusHelper.getAllEnrolments()
+
         view.findViewById<FloatingActionButton>(R.id.add_fab)
             .apply {
                 setOnClickListener {
@@ -62,20 +68,56 @@ class EventsFragment : Fragment() {
 
                 }
             }
-        view.findViewById<RecyclerView>(R.id.recyclerView)
-            .apply {
-                layoutManager = LinearLayoutManager(requireContext())
-                val eventAdapter =
-                    EventAdapter(requireContext(), eventList, this@EventsFragment::handleClick)
-                adapter = eventAdapter
-                eventAdapter.notifyDataSetChanged()
-            }
+        mRecyclerView = view.findViewById(R.id.recyclerView)
+
+        setHasOptionsMenu(true)
         loadActiveProgram()
+        loadActiveEnrollments("ALL")
 
         return view
     }
 
+    private fun loadActiveEnrollments(s: String) {
+        if (s == "ALL") {
+            eventList = SyncStatusHelper.getAllEnrolments()
+        } else if (s == "draft") {
+            eventList.filter { it.status()!!.name == "TO_UPLOAD" }
+        }
+        mRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            val eventAdapter =
+                EventAdapter(requireContext(), eventList, this@EventsFragment::handleClick)
+            adapter = eventAdapter
+            eventAdapter.notifyDataSetChanged()
 
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.menu_search, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        return when (item.itemId) {
+            R.id.action_filter -> {
+                // Do something when the menu item is clicked
+                showFilterBottomSheet()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun showFilterBottomSheet() {
+        val bottomSheetFragment = FilterBottomSheetFragment()
+        bottomSheetFragment.setFilterBottomSheetListener(this)
+        bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
+
+    }
 
     private fun handleClick(event: Enrollment) {
         FormatterClass().saveSharedPref(
@@ -99,11 +141,13 @@ class EventsFragment : Fragment() {
     }
 
     private fun createANewEvent() {
+        FormatterClass().deleteSharedPref("enrollment_id", requireContext())
         startActivity(Intent(requireContext(), RegistryActivity::class.java))
     }
 
     override fun onResume() {
         loadActiveProgram()
+        loadActiveEnrollments("ALL")
         super.onResume()
     }
 
@@ -123,6 +167,18 @@ class EventsFragment : Fragment() {
                 FormatterClass().saveSharedPref(FACILITY_PROGRAM_UUID, fac.uid(), requireContext())
             }
         }
+    }
+
+    override fun onStatusClicked(status: String) {
+        loadActiveEnrollments(status)
+    }
+
+    override fun onDateClick() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onDateRangeClicked() {
+        TODO("Not yet implemented")
     }
 
 

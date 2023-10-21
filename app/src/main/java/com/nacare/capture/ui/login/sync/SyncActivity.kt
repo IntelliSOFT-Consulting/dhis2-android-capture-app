@@ -9,10 +9,14 @@ import com.example.android.androidskeletonapp.R
 import com.nacare.capture.data.Sdk
 import com.nacare.capture.data.service.ActivityStarter
 import com.nacare.capture.ui.main.MainActivity
+import com.nacare.capture.ui.v2.live.RetrofitCalls
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.hisp.dhis.android.core.arch.call.D2Progress
 import org.hisp.dhis.android.core.domain.aggregated.data.AggregatedD2Progress
 import org.hisp.dhis.android.core.tracker.exporter.TrackerD2Progress
@@ -21,6 +25,7 @@ import org.hisp.dhis.android.core.user.User
 class SyncActivity : AppCompatActivity() {
     private var isSyncing = false
     private var compositeDisposable: CompositeDisposable? = null
+    private val retrofitCalls = RetrofitCalls()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sync)
@@ -31,9 +36,14 @@ class SyncActivity : AppCompatActivity() {
             Log.e("TAG", "Logged In User ${user.displayName()}")
             downloadData()
         }
+        loadInitialData()
 
     }
-
+    private fun loadInitialData() {
+        CoroutineScope(Dispatchers.IO).launch {
+//            retrofitCalls.loadOrganization(this@SyncActivity)
+        }
+    }
     private fun getUser(): User? {
         return Sdk.d2().userModule().user().blockingGet()
     }

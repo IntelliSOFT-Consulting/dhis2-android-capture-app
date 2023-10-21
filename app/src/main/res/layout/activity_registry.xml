@@ -231,6 +231,8 @@
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingBottom="@dimen/_100dp"
                 tools:listitem="@layout/item_program" />
         </LinearLayout>
     </RelativeLayout>

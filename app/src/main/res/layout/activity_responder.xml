@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.nacare.capture.ui.v2.patients.PatientRegistrationActivity">
+    tools:context="com.nacare.capture.ui.v2.registry.ResponderActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -65,8 +65,8 @@
                         android:id="@+id/text_view_progress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="11sp"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                        android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="@+id/progress_bar"
                         app:layout_constraintEnd_toEndOf="@+id/progress_bar"
                         app:layout_constraintStart_toStartOf="@+id/progress_bar"

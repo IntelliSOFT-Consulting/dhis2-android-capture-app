@@ -1,6 +1,7 @@
 package com.nacare.capture.data.service;
 
 
+import static org.hisp.dhis.android.core.arch.repositories.scope.RepositoryScope.OrderByDirection.ASC;
 import static org.hisp.dhis.android.core.arch.repositories.scope.RepositoryScope.OrderByDirection.DESC;
 
 import android.os.Build;
@@ -12,14 +13,23 @@ import com.nacare.capture.data.Sdk;
 import org.hisp.dhis.android.core.common.BaseIdentifiableObject;
 import org.hisp.dhis.android.core.common.FilterQueryCriteria;
 import org.hisp.dhis.android.core.common.State;
+import org.hisp.dhis.android.core.dataelement.DataElement;
+import org.hisp.dhis.android.core.datavalue.DataValue;
 import org.hisp.dhis.android.core.enrollment.Enrollment;
 import org.hisp.dhis.android.core.enrollment.EnrollmentStatus;
 import org.hisp.dhis.android.core.event.Event;
+import org.hisp.dhis.android.core.event.EventCreateProjection;
+import org.hisp.dhis.android.core.event.EventStatus;
+import org.hisp.dhis.android.core.maintenance.D2Error;
+import org.hisp.dhis.android.core.option.Option;
 import org.hisp.dhis.android.core.organisationunit.OrganisationUnit;
 import org.hisp.dhis.android.core.program.Program;
 import org.hisp.dhis.android.core.program.ProgramStage;
+import org.hisp.dhis.android.core.program.ProgramStageDataElement;
 import org.hisp.dhis.android.core.program.ProgramStageSection;
+import org.hisp.dhis.android.core.trackedentity.AttributeValueFilter;
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityAttribute;
+import org.hisp.dhis.android.core.trackedentity.TrackedEntityDataValue;
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityInstance;
 import org.jetbrains.annotations.NotNull;
 
@@ -105,6 +115,30 @@ public class SyncStatusHelper {
                 .byEnrollmentUid().isNull().blockingCount();
     }
 
+    public static Event getEventsPerEnrollment(String stage, String enrollmentUid) {
+        return Sdk.d2().eventModule().events()
+                .orderByEventDate(DESC)
+                .orderByLastUpdated(DESC)
+                .byEnrollmentUid().eq(enrollmentUid)
+                .byProgramStageUid().eq(stage)
+                .one()
+                .blockingGet();
+    }
+
+    public static List<TrackedEntityDataValue> getEventAttribute(String eventUid) {
+        return Sdk.d2().trackedEntityModule().trackedEntityDataValues()
+//                .byEvent().eq(eventUid)
+                .get()
+                .blockingGet();
+    }
+
+    public static List<Event> getEventDataValuesPerEnrollment(String evenUid) {
+        return Sdk.d2().eventModule().events()
+                .byUid().eq(evenUid)
+                .get()
+                .blockingGet();
+    }
+
     public static TrackedEntityAttribute singleAttribute(String uuid) {
         return Sdk.d2().trackedEntityModule()
                 .trackedEntityAttributes()
@@ -116,6 +150,7 @@ public class SyncStatusHelper {
         return Sdk.d2().trackedEntityModule()
                 .trackedEntityAttributes()
                 .withLegendSets()
+                .orderByCreated(ASC)
                 .get()
                 .blockingGet();
     }
@@ -155,10 +190,6 @@ public class SyncStatusHelper {
     }
 
     public List<ProgramStage> getProgramStagesForProgram(String programUid) {
-     /*   return Sdk.d2().programModule().programStages()
-                .byProgramUid().eq(programUid)
-                .get()
-                .blockingGet();*/
         try {
             List<ProgramStage> programStages = Sdk.d2().programModule().programStages()
                     .byProgramUid().eq(programUid)
@@ -175,6 +206,29 @@ public class SyncStatusHelper {
             return null; // or throw an exception based on your error handling strategy
         }
     }
+
+    public List<ProgramStageSection> getProgramStageSections(String programStageUid) {
+        return Sdk.d2().programModule().programStageSections()
+                .byProgramStageUid().eq(programStageUid)
+                .withDataElements()
+                .get()
+                .blockingGet();
+    }
+
+    public List<Option> getDataElementOptions(String elementUid) {
+        return Sdk.d2().optionModule().options().byOptionSetUid()
+                .eq(elementUid)
+                .get()
+                .blockingGet();
+    }
+
+    public List<ProgramStageDataElement> getDataElements(String programStageUid) {
+        return Sdk.d2().programModule().programStageDataElements()
+                .byProgramStage().eq(programStageUid)
+                .get()
+                .blockingGet();
+    }
+
 
     public OrganisationUnit getOrganizationByUuid(String organizationUuid) {
         return Sdk.d2().organisationUnitModule().organisationUnits()
@@ -227,6 +281,11 @@ public class SyncStatusHelper {
                 .withNotes()
                 .one().blockingGet();
     }
+    public static List<OrganisationUnit> loadOrganizations() {
+        return Sdk.d2().organisationUnitModule()
+                .organisationUnits()
+                .get().blockingGet();
+    }
 
     public static List<Event> getAllEventsWithTrackedEntities() {
         try {
@@ -256,4 +315,28 @@ public class SyncStatusHelper {
     }
 
 
+    public static void createEvent() {
+      /*  try {
+            String eventUid = Sdk.d2().eventModule().events().add(
+                    EventCreateProjection.create("enrollment", "program", "programStage", "orgUnit", "attCombo"));
+
+            Sdk.d2().eventModule().events().uid(eventUid).setStatus(EventStatus.ACTIVE);
+        } catch (D2Error d2Error) {
+
+        }*/
+       /* val eventBuilder = EventCreateProjection.builder()
+                .program(data.position)
+                .organisationUnit(org)
+                .programStage(data.id)
+                .enrollment(date)
+                .build()
+        // Create the empty event
+        val eventUid = Sdk.d2().eventModule().events()
+                .blockingAdd(eventBuilder)
+        Sdk.d2().eventModule().events().uid(eventUid).apply {
+            setStatus(EventStatus.ACTIVE)
+            setEventDate(FormatterClass().parseEventDate(date))
+            L*/
+
+    }
 }

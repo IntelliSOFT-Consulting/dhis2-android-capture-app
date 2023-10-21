@@ -19,6 +19,7 @@ import java.util.Locale
 import java.util.UUID
 
 class AppUtils {
+
     fun containsAnyKeyword(displayName: String, keywords: List<String>): Boolean {
         return keywords.any { keyword -> displayName.contains(keyword) }
     }
@@ -50,7 +51,7 @@ class AppUtils {
             .show()
     }
 
-    fun isOnline(context: Context): Boolean {
+    fun  isOnline(context: Context): Boolean {
         var isOnline = false
         try {
             val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

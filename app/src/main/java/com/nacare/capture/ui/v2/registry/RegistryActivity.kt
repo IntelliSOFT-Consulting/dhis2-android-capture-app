@@ -19,9 +19,11 @@ import com.nacare.capture.data.service.SyncStatusHelper
 import com.nacare.capture.models.ProgramCategory
 import com.nacare.capture.ui.v2.facility.FacilityListActivity
 import com.nacare.capture.ui.v2.patients.PatientListActivity
+import com.nacare.capture.ui.v2.patients.PatientRegistrationActivity
 import com.nacare.capture.ui.v2.patients.PatientSearchActivity
 import org.hisp.dhis.android.core.event.EventCreateProjection
 import org.hisp.dhis.android.core.event.EventStatus
+import org.hisp.dhis.android.core.program.ProgramStageSection
 
 class RegistryActivity : AppCompatActivity() {
 
@@ -47,7 +49,20 @@ class RegistryActivity : AppCompatActivity() {
         }
         findViewById<MaterialCardView>(R.id.patientCardView).apply {
             setOnClickListener {
-                startActivity(Intent(this@RegistryActivity, PatientSearchActivity::class.java))
+                val enroll = FormatterClass().getSharedPref(
+                    "enrollment_id",
+                    this@RegistryActivity
+                )
+                if (enroll != null) {
+                    startActivity(
+                        Intent(
+                            this@RegistryActivity,
+                            PatientRegistrationActivity::class.java
+                        )
+                    )
+                } else {
+                    startActivity(Intent(this@RegistryActivity, PatientSearchActivity::class.java))
+                }
             }
         }
         findViewById<TextView>(R.id.tv_sub_title).apply {
@@ -72,13 +87,13 @@ class RegistryActivity : AppCompatActivity() {
             val stageSections = SyncStatusHelper().getProgramStagesForProgram(program)
             dataList.clear()
             stageSections.forEach {
-                Log.e("TAG", "Program Stages ${it.displayName()}")
+                val stage = SyncStatusHelper().getProgramStageSections(it.uid())
                 val data = ProgramCategory(
                     iconResId = null,
                     name = it.displayName().toString(),
                     id = it.uid(),
-                    done = "0",
-                    total = "0",
+                    done = retrieveTotalDataElementValues(it.uid(), stage),
+                    total = retrieveTotalDataElements(stage),
                     elements = emptyList(),
                     altElements = emptyList(),
                     position = program
@@ -100,6 +115,41 @@ class RegistryActivity : AppCompatActivity() {
         }
     }
 
+    private fun retrieveTotalDataElementValues(
+        program: String,
+        stage: List<ProgramStageSection>
+    ): String {
+        var total = 0
+        val enroll = FormatterClass().getSharedPref(
+            "enrollment_id",
+            this@RegistryActivity
+        )
+        if (enroll != null) {
+            val singleEvent = SyncStatusHelper.getEventsPerEnrollment(program, enroll)
+            Log.e("TAG", "Tracked Entity View Stage $program")
+            Log.e("TAG", "Tracked Entity View Events $singleEvent")
+            if (singleEvent != null) {
+                val attributes = SyncStatusHelper.getEventAttribute(singleEvent.uid())
+                Log.e("TAG", "Tracked Entity View Attributes $attributes")
+            }
+        }
+        return "$total"
+
+    }
+
+    private fun retrieveTotalDataElements(stage: List<ProgramStageSection>): String {
+        var total = 0
+        stage.forEach {
+            if (it.dataElements() != null) {
+                it.dataElements()!!.forEach { _ ->
+                    total++
+                }
+            }
+        }
+        return "$total"
+
+    }
+
     private fun getOrganizationName(org: String): String? {
         val or = SyncStatusHelper().getOrganizationByUuid(org)
         if (or != null) {
@@ -114,14 +164,25 @@ class RegistryActivity : AppCompatActivity() {
             this@RegistryActivity
         )
         if (enroll != null) {
-            val dataEnrollment = SyncStatusHelper.getAllEvents(enroll)
-            Log.e("TAG","Enroll Data Each ${data.id}")
-            dataEnrollment.forEach {
-                Log.e("TAG","Enroll Data Each $it")
+            FormatterClass().saveSharedPref(
+                "section_id", data.id,
+                this@RegistryActivity
+            )
+            val date = FormatterClass().getSharedPref(
+                "event_date",
+                this@RegistryActivity
+            )
+            val org = FormatterClass().getSharedPref(
+                "event_organization",
+                this@RegistryActivity
+            )
+
+
+            if (date != null && org != null) {
+                SyncStatusHelper.createEvent()
+                startActivity(Intent(this@RegistryActivity, ResponderActivity::class.java))
             }
-
         }
-
     }
 
     private fun handleClickOld(data: ProgramCategory) {

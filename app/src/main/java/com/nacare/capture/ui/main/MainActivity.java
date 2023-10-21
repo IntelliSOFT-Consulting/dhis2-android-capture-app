@@ -26,6 +26,8 @@ import com.nacare.capture.ui.v2.ProgramsFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.nacare.capture.data.service.LogOutService;
+import com.nacare.capture.ui.v2.live.RetrofitCalls;
+import com.nacare.capture.utils.AppUtils;
 
 import org.hisp.dhis.android.core.arch.call.D2Progress;
 import org.hisp.dhis.android.core.domain.aggregated.data.AggregatedD2Progress;
@@ -47,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ProgressBar progressBar;
 
     private boolean isSyncing = false;
+    private RetrofitCalls retrofitCalls = new RetrofitCalls();
+
 
     public static Intent getMainActivityIntent(Context context) {
         return new Intent(context, MainActivity.class);
@@ -61,15 +65,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         compositeDisposable = new CompositeDisposable();
 
         User user = getUser();
-
+        setTitle("National Cancer Registry of Kenya");
         inflateMainView();
         createNavigationView(user);
 
         if (savedInstanceState == null) {
             loadFragment(new ProgramsFragment());
         }
+//        if (new AppUtils().isOnline(this))
+//            retrofitCalls.loadOrganization(this);
+    }
 
-//        downloadData();
+    private void loadOrganization() {
 
     }
 
@@ -85,7 +92,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
-        updateSyncDataAndButtons();
     }
 
     private User getUser() {
@@ -138,56 +144,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setSyncing() {
         isSyncing = true;
         progressBar.setVisibility(View.VISIBLE);
-        updateSyncDataAndButtons();
     }
 
     private void setSyncingFinished() {
         isSyncing = false;
-//        progressBar.setVisibility(View.GONE);
-        updateSyncDataAndButtons();
+        progressBar.setVisibility(View.GONE);
     }
 
-    private void disableAllButtons() {
-     /*   setEnabledButton(syncMetadataButton, false);
-        setEnabledButton(syncDataButton, false);*/
-    }
-
-    private void enablePossibleButtons(boolean metadataSynced) {
-      /*  if (!isSyncing) {
-            setEnabledButton(syncMetadataButton, true);
-            if (metadataSynced) {
-                setEnabledButton(syncDataButton, true);
-            }
-        }*/
-    }
 
     private void setEnabledButton(FloatingActionButton floatingActionButton, boolean enabled) {
         floatingActionButton.setEnabled(enabled);
         floatingActionButton.setAlpha(enabled ? 1.0f : 0.3f);
     }
 
-    private void updateSyncDataAndButtons() {
-        disableAllButtons();
-
-        int programCount = SyncStatusHelper.programCount();
-        int dataSetCount = SyncStatusHelper.dataSetCount();
-        int trackedEntityInstanceCount = SyncStatusHelper.trackedEntityInstanceCount();
-        int singleEventCount = SyncStatusHelper.singleEventCount();
-        int dataValueCount = SyncStatusHelper.dataValueCount();
-
-        enablePossibleButtons(programCount + dataSetCount > 0);
-
-    /*    TextView downloadedProgramsText = findViewById(R.id.programsDownloadedText);
-        TextView downloadedDataSetsText = findViewById(R.id.dataSetsDownloadedText);
-        TextView downloadedTeisText = findViewById(R.id.trackedEntityInstancesDownloadedText);
-        TextView singleEventsDownloadedText = findViewById(R.id.singleEventsDownloadedText);
-        TextView downloadedDataValuesText = findViewById(R.id.dataValuesDownloadedText);
-        downloadedProgramsText.setText(MessageFormat.format("{0}", programCount));
-        downloadedDataSetsText.setText(MessageFormat.format("{0}", dataSetCount));
-        downloadedTeisText.setText(MessageFormat.format("{0}", trackedEntityInstanceCount));
-        singleEventsDownloadedText.setText(MessageFormat.format("{0}", singleEventCount));
-        downloadedDataValuesText.setText(MessageFormat.format("{0}", dataValueCount));*/
-    }
 
     private void createNavigationView(User user) {
         Toolbar toolbar = findViewById(R.id.toolbar);

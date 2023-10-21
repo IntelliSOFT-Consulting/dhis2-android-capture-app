@@ -12,6 +12,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.nacare.capture.data.Sdk.d2
+import com.nacare.capture.data.service.SyncStatusHelper
 import com.nacare.capture.utils.AppUtils
 import org.hisp.dhis.android.core.user.User
 
@@ -58,11 +59,29 @@ class ProgramsFragment : Fragment() {
         }
         view.findViewById<MaterialButton>(R.id.btn_next).apply {
             setOnClickListener {
+                val name = view.findViewById<TextInputEditText>(R.id.edt_org).text.toString()
+                val date = view.findViewById<TextInputEditText>(R.id.edt_date).text.toString()
+
+                if (date.isEmpty()) {
+                    view.findViewById<TextInputLayout>(R.id.date_holder).error =
+                        "Please select date"
+                    view.findViewById<TextInputEditText>(R.id.edt_date).requestFocus()
+                    return@setOnClickListener
+                }
                 openEventsFragment()
             }
         }
 
+        loadOrganizations()
+
         return view
+    }
+
+    private fun loadOrganizations() {
+        val orgs =SyncStatusHelper.loadOrganizations()
+        orgs.forEach {
+            Log.e("TAG","Org $it")
+        }
     }
 
     private fun getUserOrganizationAndChildren() {

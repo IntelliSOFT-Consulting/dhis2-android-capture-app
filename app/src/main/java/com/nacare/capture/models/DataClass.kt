@@ -20,7 +20,26 @@ data class FacilityProgramCategory(
     val displayName: String,
     val id: String
 )
+data class OrganizationResponse(
 
+    val id: String,
+    val username: String,
+    val surname: String,
+    val firstName: String,
+    val organisationUnits: List<OrganisationUnit>
+)
+
+data class OrganizationUnitResponse(
+    val name: String,
+    val children: List<CountyUnit>,
+    val id: String
+)
+
+data class CountyUnit(
+    val name: String,
+    val children: List<CountyUnit>,
+    val id: String
+)
 data class ProgramCategory(
     val iconResId: Int?,
     val name: String,

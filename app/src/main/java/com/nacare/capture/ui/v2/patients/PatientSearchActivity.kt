@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -73,6 +75,36 @@ class PatientSearchActivity : AppCompatActivity() {
                         inputFieldMap[it.uid()] = editText
                         lnParent.addView(itemView)
                     }
+                /*else {
+                        val itemView = layoutInflater.inflate(
+                            R.layout.item_autocomplete,
+                            lnParent,
+                            false
+                        ) as LinearLayout
+                        val optionsList: MutableList<String> = mutableListOf()
+                        val adp = ArrayAdapter(
+                            this@PatientSearchActivity,
+                            android.R.layout.simple_list_item_1,
+                            optionsList
+                        )
+                        val tvName = itemView.findViewById<TextView>(R.id.tv_name)
+                        val tvElement = itemView.findViewById<TextView>(R.id.tv_element)
+                        val textInputLayout =
+                            itemView.findViewById<TextInputLayout>(R.id.textInputLayout)
+                        val autoCompleteTextView =
+                            itemView.findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)
+                        val op = SyncStatusHelper().getDataElementOptions(it.optionSetUid())
+
+                        tvElement.text = it.uid()
+                        optionsList.clear()
+                        op.forEach {
+                            optionsList.add(it.displayName().toString())
+                        }
+                        tvName.text = it.displayName()
+                        autoCompleteTextView.setAdapter(adp)
+                        adp.notifyDataSetChanged()
+                        lnParent.addView(itemView)
+                    }*/
                 }
 
                 else -> {}

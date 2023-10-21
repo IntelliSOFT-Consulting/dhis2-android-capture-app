@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.android.androidskeletonapp.R;
+import com.nacare.capture.data.FormatterClass;
 import com.nacare.capture.data.service.ActivityStarter;
 import com.nacare.capture.ui.login.sync.SyncActivity;
 import com.nacare.capture.ui.main.MainActivity;
@@ -33,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private MaterialButton loginButton;
 
     public static Intent getLoginActivityIntent(Context context) {
-        return new Intent(context,LoginActivity.class);
+        return new Intent(context, LoginActivity.class);
     }
 
     @Override
@@ -73,7 +74,11 @@ public class LoginActivity extends AppCompatActivity {
                 showLoginFailed(loginResult.getError());
             }
             if (loginResult.getSuccess() != null) {
-                ActivityStarter.startActivity(this, SyncActivity.getMainActivityIntent(this),true);
+                String username = usernameEditText.getText().toString();
+                String password = passwordEditText.getText().toString();
+                new FormatterClass().saveSharedPref("username", username, this);
+                new FormatterClass().saveSharedPref("password", password, this);
+                ActivityStarter.startActivity(this, SyncActivity.getMainActivityIntent(this), true);
             }
             setResult(Activity.RESULT_OK);
         });
@@ -121,7 +126,9 @@ public class LoginActivity extends AppCompatActivity {
         disposable = loginViewModel
                 .login(username, password, serverUrl)
                 .doOnTerminate(() -> loginButton.setVisibility(View.VISIBLE))
-                .subscribe(u -> {}, t -> {});
+                .subscribe(u -> {
+                }, t -> {
+                });
     }
 
     @Override

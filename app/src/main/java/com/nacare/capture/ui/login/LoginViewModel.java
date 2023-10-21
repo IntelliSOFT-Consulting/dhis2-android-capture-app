@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.android.androidskeletonapp.R;
+import com.nacare.capture.data.FormatterClass;
 import com.nacare.capture.data.Sdk;
 
 import org.hisp.dhis.android.core.maintenance.D2Error;
@@ -38,6 +39,7 @@ public class LoginViewModel extends ViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSuccess(user -> {
                     if (user != null) {
+
                         loginResult.postValue(new LoginResult(user));
                     } else {
                         loginResult.postValue(new LoginResult("Login error: no user"));
