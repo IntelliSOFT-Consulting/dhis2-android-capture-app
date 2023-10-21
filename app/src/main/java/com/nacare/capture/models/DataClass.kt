@@ -10,6 +10,11 @@ class DataClass {
 
 }
 
+data class CodeValue(
+    val code: String,
+    val value: String
+)
+
 data class FacilityProgramCategory(
     val dataElements: List<DataElement>?,
     val displayName: String,

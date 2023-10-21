@@ -20,9 +20,12 @@ import com.nacare.capture.data.service.SyncStatusHelper
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.nacare.capture.data.Constants
 import com.nacare.capture.data.Constants.FACILITY_PROGRAM_UUID
+import com.nacare.capture.models.CodeValue
 import com.nacare.capture.ui.v2.registry.RegistryActivity
 import com.nacare.capture.utils.AppUtils
 import org.hisp.dhis.android.core.enrollment.Enrollment
+import org.hisp.dhis.android.core.enrollment.EnrollmentCreateProjection
+import org.hisp.dhis.android.core.enrollment.EnrollmentStatus
 import org.hisp.dhis.android.core.event.Event
 import org.hisp.dhis.android.core.event.EventCreateProjection
 
@@ -38,6 +41,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class EventsFragment : Fragment() {
 
+    private var eventList = mutableListOf<Enrollment>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,12 +49,10 @@ class EventsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_events, container, false)
-        val eventList = SyncStatusHelper.getAllEnrolments()
+        eventList = SyncStatusHelper.getAllEnrolments()
         view.findViewById<FloatingActionButton>(R.id.add_fab)
             .apply {
                 setOnClickListener {
-                    /*  val intent = Intent(requireContext(), RegistryActivity::class.java)
-                      startActivity(intent)*/
                     createANewEvent()
                 }
             }
@@ -66,11 +68,14 @@ class EventsFragment : Fragment() {
                 val eventAdapter =
                     EventAdapter(requireContext(), eventList, this@EventsFragment::handleClick)
                 adapter = eventAdapter
+                eventAdapter.notifyDataSetChanged()
             }
         loadActiveProgram()
 
         return view
     }
+
+
 
     private fun handleClick(event: Enrollment) {
         FormatterClass().saveSharedPref(
@@ -94,101 +99,12 @@ class EventsFragment : Fragment() {
     }
 
     private fun createANewEvent() {
+        startActivity(Intent(requireContext(), RegistryActivity::class.java))
+    }
 
-        // Assume you have initialized the DHIS2 SDK (Sdk.d2()) before calling this function
-
-        try {
-
-            val programs = SyncStatusHelper.programList()
-            if (programs.isNotEmpty()) {
-                Log.e("TAG", "Programs -> :::: $programs")
-                val notification =
-                    programs.find { it.name() == "The National Cancer Registry of Kenya Notification Form" }
-                if (notification != null) {
-                    FormatterClass().saveSharedPref(
-                        PROGRAM_UUID,
-                        notification.uid(),
-                        requireContext()
-                    )
-                }
-
-                val fac =
-                    programs.find { it.name() == " Facility Details Capture Tool" }
-                if (fac != null) {
-                    FormatterClass().saveSharedPref(
-                        FACILITY_PROGRAM_UUID,
-                        fac.uid(),
-                        requireContext()
-                    )
-                }
-
-            } else {
-                Log.e("TAG", "Empty Programs")
-                Toast.makeText(requireContext(), "Please Sync data first", Toast.LENGTH_SHORT)
-                    .show()
-            }
-            val program = FormatterClass().getSharedPref(PROGRAM_UUID, requireContext())
-            if (program != null) {
-                val programData = SyncStatusHelper.singleProgram(program)
-                val date = FormatterClass().getSharedPref(
-                    "event_date",
-                    requireContext()
-                )
-                val org = FormatterClass().getSharedPref(
-                    "event_organization",
-                    requireContext()
-                )
-                if (date != null && org != null) {
-
-                    /*  val eventBuilder = EventCreateProjection.builder()
-                          .program(programData.uid())
-                          .organisationUnit(org)
-  //                        .programStage()
-
-                      // Create the empty event
-                      val eventUid = Sdk.d2().eventModule().events()
-                          .blockingAdd(eventBuilder.build())*/
-                    /*     Log.e("TAG", "Event created with UID: $eventUid")
-     */
-
-                }
-            }
-
-            // Retrieve the program details
-            /*   val program = Sdk.d2().programModule().programs()
-                   .byUid().eq(programUid)
-                   .one()
-                   .blockingGet()*/
-
-            // Retrieve the tracked entity instance details
-            /*  val trackedEntityInstance = Sdk.d2().trackedEntityModule().trackedEntityInstances()
-                  .byUid().eq(trackedEntityInstanceUid)
-                  .one()
-                  .blockingGet()*/
-
-            // Build the event data
-//            val eventBuilder = EventCreateProjection.builder()
-////                .trackedEntityInstance(trackedEntityInstance)
-////                .program(program)
-//                .status(State.TO_POST)
-//                .eventDate("2023-10-20") // Set the event date as needed
-
-            // Add data values to the event
-//            for ((dataElementUid, value) in dataValues) {
-//                eventBuilder.dataValue(dataElementUid, value)
-//            }
-
-            // Create the event
-            /*   val eventUid = Sdk.d2().eventModule().events()
-                   .blockingAdd(eventBuilder.build())
-
-               // The event has been created successfully
-               println("Event created with UID: $eventUid")*/
-        } catch (exception: Exception) {
-            // Handle exceptions
-            exception.printStackTrace()
-        }
-
+    override fun onResume() {
+        loadActiveProgram()
+        super.onResume()
     }
 
     private fun loadActiveProgram() {

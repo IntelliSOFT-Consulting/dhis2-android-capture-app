@@ -5,17 +5,18 @@ import static org.hisp.dhis.android.core.arch.repositories.scope.RepositoryScope
 
 import android.os.Build;
 
+import com.nacare.capture.models.CodeValue;
 import com.nacare.capture.models.EventWithOrganization;
 import com.nacare.capture.data.Sdk;
 
 import org.hisp.dhis.android.core.common.BaseIdentifiableObject;
+import org.hisp.dhis.android.core.common.FilterQueryCriteria;
 import org.hisp.dhis.android.core.common.State;
-import org.hisp.dhis.android.core.dataelement.DataElement;
 import org.hisp.dhis.android.core.enrollment.Enrollment;
+import org.hisp.dhis.android.core.enrollment.EnrollmentStatus;
 import org.hisp.dhis.android.core.event.Event;
 import org.hisp.dhis.android.core.organisationunit.OrganisationUnit;
 import org.hisp.dhis.android.core.program.Program;
-import org.hisp.dhis.android.core.program.ProgramSection;
 import org.hisp.dhis.android.core.program.ProgramStage;
 import org.hisp.dhis.android.core.program.ProgramStageSection;
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityAttribute;
@@ -69,6 +70,19 @@ public class SyncStatusHelper {
                 .blockingGet();
     }
 
+    public static TrackedEntityInstance getTrackedEntity(String uuid) {
+        return Sdk.d2().trackedEntityModule().trackedEntityInstances()
+                .byAggregatedSyncState().neq(State.RELATIONSHIP)
+                .withTrackedEntityAttributeValues()
+                .byUid().eq(uuid)
+                .orderByCreated(DESC)
+                .orderByLastUpdated(DESC)
+                .orderByCreatedAtClient(DESC)
+                .one()
+                .blockingGet();
+    }
+
+
     public static List<ProgramStage> programStages(String programUuid) {
         return Sdk.d2().programModule().programStages()
                 .byProgramUid().eq(programUuid)
@@ -97,11 +111,19 @@ public class SyncStatusHelper {
                 .byUid().eq(uuid)
                 .one().blockingGet();
     }
+
     public static List<TrackedEntityAttribute> trackedEntityAttributes() {
         return Sdk.d2().trackedEntityModule()
                 .trackedEntityAttributes()
+                .withLegendSets()
                 .get()
                 .blockingGet();
+    }
+
+    public static List<TrackedEntityInstance> searchEntityAttributes(FilterQueryCriteria filters) {
+        return Sdk.d2().trackedEntityModule()
+                .trackedEntityInstanceQuery().get().blockingGet();
+
     }
 
 
@@ -175,6 +197,26 @@ public class SyncStatusHelper {
                 .orderByLastUpdated(DESC)
                 .orderByEnrollmentDate(DESC)
                 .get()
+                .blockingGet();
+    }
+
+    public static List<Enrollment> getAllActiveEntityEnrolments(String entity) {
+        return Sdk.d2().enrollmentModule()
+                .enrollments()
+                .orderByCreated(DESC)
+                .orderByLastUpdated(DESC)
+                .orderByEnrollmentDate(DESC)
+                .byTrackedEntityInstance().eq(entity)
+                .get()
+                .blockingGet();
+    }
+
+    public static Enrollment getLatestEntityEnrollment(String entity) {
+        return Sdk.d2().enrollmentModule()
+                .enrollments()
+                .orderByEnrollmentDate(DESC)
+                .byTrackedEntityInstance().eq(entity)
+                .one()
                 .blockingGet();
     }
 

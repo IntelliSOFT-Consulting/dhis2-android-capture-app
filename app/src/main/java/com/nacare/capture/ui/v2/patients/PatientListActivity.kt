@@ -1,11 +1,13 @@
 package com.nacare.capture.ui.v2.patients
 
+import android.content.Intent
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,10 +15,15 @@ import com.example.android.androidskeletonapp.R
 import com.fasterxml.jackson.annotation.JsonInclude.Include
 import com.nacare.capture.adapters.EventAdapter
 import com.nacare.capture.adapters.PatientAdapter
+import com.nacare.capture.data.Constants
+import com.nacare.capture.data.Constants.PROGRAM_UUID
+import com.nacare.capture.data.FormatterClass
 import com.nacare.capture.data.Sdk
 import com.nacare.capture.data.service.SyncStatusHelper
 import com.nacare.capture.models.Person
 import com.nacare.capture.utils.AppUtils
+import org.hisp.dhis.android.core.enrollment.EnrollmentCreateProjection
+import org.hisp.dhis.android.core.enrollment.EnrollmentStatus
 
 class PatientListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -103,7 +110,92 @@ class PatientListActivity : AppCompatActivity() {
     }
 
     private fun handleClick(person: Person) {
+        try {
+            val existingEnrollment =
+                SyncStatusHelper.getAllActiveEntityEnrolments(person.trackedEntityInstance)
+            if (existingEnrollment.isNotEmpty()) {
+                Log.e("TAG", "Patient Has an active enrollment")
+                val single =
+                    SyncStatusHelper.getLatestEntityEnrollment(person.trackedEntityInstance)
+                FormatterClass().saveSharedPref(
+                    "enrollment_id",
+                    single.uid(),
+                    this@PatientListActivity
+                )
+                startActivity(
+                    Intent(
+                        this@PatientListActivity,
+                        PatientRegistrationActivity::class.java
+                    )
+                )
+                this@PatientListActivity.finish()
 
+            } else {
+                val programs = SyncStatusHelper.programList()
+                if (programs.isNotEmpty()) {
+                    Log.e("TAG", "Programs -> :::: $programs")
+                    val notification =
+                        programs.find { it.name() == "The National Cancer Registry of Kenya Notification Form" }
+                    if (notification != null) {
+                        FormatterClass().saveSharedPref(
+                            PROGRAM_UUID,
+                            notification.uid(),
+                            this@PatientListActivity
+                        )
+                    }
+                    val program =
+                        FormatterClass().getSharedPref(PROGRAM_UUID, this@PatientListActivity)
+                    if (program != null) {
+                        val date = FormatterClass().getSharedPref(
+                            "event_date",
+                            this@PatientListActivity
+                        )
+                        val org = FormatterClass().getSharedPref(
+                            "event_organization",
+                            this@PatientListActivity
+                        )
+                        if (date != null && org != null) {
+                            val enrollmentBuild = EnrollmentCreateProjection.builder()
+                                .program(program)
+                                .organisationUnit(org)
+                                .trackedEntityInstance(person.trackedEntityInstance)
+                                .build()
+
+                            val enrolment = Sdk.d2().enrollmentModule().enrollments()
+                                .blockingAdd(enrollmentBuild)
+                            Sdk.d2().enrollmentModule().enrollments().uid(enrolment).apply {
+                                setEnrollmentDate(FormatterClass().parseEventDate(date))
+                                setStatus(EnrollmentStatus.ACTIVE)
+
+                            }
+                            FormatterClass().saveSharedPref(
+                                "enrollment_id",
+                                enrolment,
+                                this@PatientListActivity
+                            )
+
+                        }
+                    }
+
+                } else {
+                    Log.e("TAG", "Empty Programs")
+                    Toast.makeText(
+                        this@PatientListActivity,
+                        "Please Sync data first",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(
+                this@PatientListActivity,
+                "Please Sync data first",
+                Toast.LENGTH_SHORT
+            )
+                .show()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

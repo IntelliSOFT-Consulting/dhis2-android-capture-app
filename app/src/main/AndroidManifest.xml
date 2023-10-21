@@ -33,6 +33,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
+            android:name="com.nacare.capture.ui.v2.patients.PatientRegistrationActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
             android:name="com.nacare.capture.ui.v2.facility.FacilityListActivity"
             android:exported="false"
             android:theme="@style/AppTheme.NoActionBar" />
