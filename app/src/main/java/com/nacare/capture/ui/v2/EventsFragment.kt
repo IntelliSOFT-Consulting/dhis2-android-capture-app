@@ -199,8 +199,7 @@ class EventsFragment : Fragment(), FilterBottomSheetListener {
         )
         val programUid = FormatterClass().getSharedPref(PROGRAM_UUID, requireContext())
         if (date != null && org != null && programUid != null) {
-            Log.e("TAG", "Retrieved $org")
-            Log.e("TAG", "Retrieved $programUid")
+
             val eventBuilder = EnrollmentCreateProjection.builder()
                 .trackedEntityInstance("oSrCt5azNKG")
                 .program(programUid)

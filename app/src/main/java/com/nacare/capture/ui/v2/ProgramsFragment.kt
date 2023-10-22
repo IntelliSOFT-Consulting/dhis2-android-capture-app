@@ -17,6 +17,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.nacare.capture.adapters.TreeAdapter
+import com.nacare.capture.data.FormatterClass
 import com.nacare.capture.data.Sdk.d2
 import com.nacare.capture.data.service.SyncStatusHelper
 import com.nacare.capture.models.OrgTreeNode
@@ -37,6 +38,7 @@ class ProgramsFragment : Fragment() {
     private lateinit var viewModel: MainViewModel
     private lateinit var dialog: AlertDialog
     private lateinit var edtOrg: TextInputEditText
+    private lateinit var formatterClass: FormatterClass
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,7 +46,7 @@ class ProgramsFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_programs, container, false)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-
+        formatterClass = FormatterClass()
         view.findViewById<TextInputEditText>(R.id.edt_date).apply {
             isFocusable = false
             isCursorVisible = false
@@ -80,8 +82,9 @@ class ProgramsFragment : Fragment() {
         }
         view.findViewById<MaterialButton>(R.id.btn_next).apply {
             setOnClickListener {
-                val name = view.findViewById<TextInputEditText>(R.id.edt_org).text.toString()
+                val name = edtOrg.text.toString()
                 val date = view.findViewById<TextInputEditText>(R.id.edt_date).text.toString()
+                val code = generateCode(edtOrg.text.toString())
 
                 if (date.isEmpty()) {
                     view.findViewById<TextInputLayout>(R.id.date_holder).error =
@@ -89,6 +92,16 @@ class ProgramsFragment : Fragment() {
                     view.findViewById<TextInputEditText>(R.id.edt_date).requestFocus()
                     return@setOnClickListener
                 }
+                if (name.isEmpty()) {
+                    view.findViewById<TextInputLayout>(R.id.org_holder).error =
+                        "Please select organization unit"
+                    view.findViewById<TextInputEditText>(R.id.edt_org).requestFocus()
+                    return@setOnClickListener
+                }
+
+                formatterClass.saveSharedPref("event_date", date, requireContext())
+                formatterClass.saveSharedPref("event_organization", code, requireContext())
+                formatterClass.saveSharedPref("name", name, requireContext())
                 openEventsFragment()
             }
         }

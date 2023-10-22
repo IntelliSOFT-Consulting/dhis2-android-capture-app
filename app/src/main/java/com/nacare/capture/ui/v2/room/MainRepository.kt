@@ -1,4 +1,5 @@
 package com.nacare.capture.ui.v2.room
+
 import android.content.Context
 import com.google.gson.Gson
 import com.nacare.capture.data.FormatterClass
@@ -32,6 +33,28 @@ class MainRepository(private val roomDao: RoomDao) {
         if (userId != null) {
             roomDao.updateChildOrgUnits(code, children)
         }
+    }
+
+    fun addResponse(context: Context, data: ProgramDataValues) {
+        val exists = roomDao.checkResponse(data.enrollmentUid, data.programUid, data.attributeUid)
+        if (!exists) {
+            roomDao.addResponse(data)
+        } else {
+            roomDao.updateResponse(
+                data.enrollmentUid,
+                data.programUid,
+                data.attributeUid,
+                data.dataValue
+            )
+        }
+    }
+
+    fun getResponse(enrollmentUid: String, programUid: String, attributeUid: String): String? {
+        return roomDao.getResponse(enrollmentUid, programUid, attributeUid)
+    }
+
+    fun getResponseList(enrollmentUid: String, programUid: String): Int {
+        return roomDao.getResponseList(enrollmentUid, programUid)
     }
 
 }

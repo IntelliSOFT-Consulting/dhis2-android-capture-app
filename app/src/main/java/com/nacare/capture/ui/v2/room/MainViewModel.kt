@@ -25,4 +25,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         repository.updateChildOrgUnits(context, code, children)
     }
 
+    fun addResponse(context: Context, data: ProgramDataValues)= runBlocking {
+        repository.addResponse(context, data)
+    }
+
+    fun getResponse(enrollmentUid: String, programUid: String, attributeUid: String)= runBlocking {
+        repository.getResponse(enrollmentUid, programUid,attributeUid)
+    }
+
+    fun getResponseList(enrollmentUid: String, programUid: String)= runBlocking {
+        repository.getResponseList(enrollmentUid, programUid)
+    }
+
 }
