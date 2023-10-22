@@ -160,6 +160,15 @@ class RegistryActivity : AppCompatActivity() {
         trackedEntity.forEach {
             total++
         }
+        val enroll = FormatterClass().getSharedPref(
+            "enrollment_id",
+            this@RegistryActivity
+        )
+        val dataUser = SyncStatusHelper.getSingleEnrollment(enroll)
+        val user = SyncStatusHelper.getTrackedEntity(dataUser.trackedEntityInstance())
+        if (user != null) {
+            done = viewModel.getTrackedAttributeResponses(user.uid())
+        }
         overallTotal += total
         overallDone += done
         return "$done/$total"

@@ -80,7 +80,9 @@ class MainRepository(private val roomDao: RoomDao) {
     }
 
     fun deleteTrackedEntity(entityUid: String, attributeUid: String) {
-          roomDao.deleteTrackedEntity(entityUid, attributeUid)
+        roomDao.deleteTrackedEntity(entityUid, attributeUid)
     }
+
+
 
 }

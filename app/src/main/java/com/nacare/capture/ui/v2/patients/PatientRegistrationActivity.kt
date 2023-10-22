@@ -103,7 +103,7 @@ class PatientRegistrationActivity : AppCompatActivity() {
             val dataUser = SyncStatusHelper.getSingleEnrollment(enroll)
             val user = SyncStatusHelper.getTrackedEntity(dataUser.trackedEntityInstance())
             if (user != null) {
-                Log.e("TAG", "Enrollment Found Tracked $user")
+
                 populateViews(lnParent, user)
             }
         } else {
