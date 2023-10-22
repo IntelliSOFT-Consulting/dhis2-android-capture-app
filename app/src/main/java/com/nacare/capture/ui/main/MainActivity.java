@@ -235,8 +235,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .concatWith(Sdk.d2().eventModule().events().upload())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .doOnComplete(this::setSyncingFinished)
-                        .doOnError(Throwable::printStackTrace)
+                        .doOnComplete(
+                                this::setSyncingFinished
+                        )
+                        .doOnError(error ->
+                                Log.e("TAG", "Synced Error " + error.getMessage())
+
+                        )
                         .subscribe());
     }
 
@@ -273,5 +278,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = findViewById(R.id.drawerLayout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void handleDataSync() {
+        setSyncing();
+        uploadData();
     }
 }

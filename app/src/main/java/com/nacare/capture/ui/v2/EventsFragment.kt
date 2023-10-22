@@ -10,32 +10,32 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.androidskeletonapp.R
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.nacare.capture.adapters.EventAdapter
+import com.nacare.capture.data.Constants.FACILITY_PROGRAM_UUID
+import com.nacare.capture.data.Constants.PROGRAM_TRACKED_UUID
 import com.nacare.capture.data.Constants.PROGRAM_UUID
 import com.nacare.capture.data.FormatterClass
 import com.nacare.capture.data.Sdk
 import com.nacare.capture.data.service.SyncStatusHelper
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.nacare.capture.data.Constants
-import com.nacare.capture.data.Constants.FACILITY_PROGRAM_UUID
-import com.nacare.capture.data.Constants.PROGRAM_TRACKED_UUID
-import com.nacare.capture.models.CodeValue
+import com.nacare.capture.ui.main.MainActivity
 import com.nacare.capture.ui.v2.filters.FilterBottomSheetFragment
 import com.nacare.capture.ui.v2.filters.FilterBottomSheetListener
 import com.nacare.capture.ui.v2.registry.RegistryActivity
 import com.nacare.capture.utils.AppUtils
 import org.hisp.dhis.android.core.enrollment.Enrollment
 import org.hisp.dhis.android.core.enrollment.EnrollmentCreateProjection
-import org.hisp.dhis.android.core.enrollment.EnrollmentStatus
-import org.hisp.dhis.android.core.event.Event
-import org.hisp.dhis.android.core.event.EventCreateProjection
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -51,6 +51,7 @@ class EventsFragment : Fragment(), FilterBottomSheetListener {
 
     private var eventList = mutableListOf<Enrollment>()
     private lateinit var mRecyclerView: RecyclerView
+    private lateinit var tvNoCases: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,7 +59,7 @@ class EventsFragment : Fragment(), FilterBottomSheetListener {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_events, container, false)
-
+        tvNoCases = view.findViewById(R.id.tv_no_cases)
         view.findViewById<FloatingActionButton>(R.id.add_fab)
             .apply {
                 setOnClickListener {
@@ -68,9 +69,10 @@ class EventsFragment : Fragment(), FilterBottomSheetListener {
         view.findViewById<MaterialButton>(R.id.sync_button)
             .apply {
                 setOnClickListener {
-
+                    (activity as MainActivity).handleDataSync()
                 }
             }
+
         mRecyclerView = view.findViewById(R.id.recyclerView)
 
         setHasOptionsMenu(true)
@@ -123,6 +125,12 @@ class EventsFragment : Fragment(), FilterBottomSheetListener {
                     }
                 }
             }
+        }
+
+        if (eventFilterList.isNotEmpty()) {
+            tvNoCases.visibility = View.GONE
+        } else {
+            tvNoCases.visibility = View.VISIBLE
         }
 
         mRecyclerView.apply {
@@ -253,27 +261,170 @@ class EventsFragment : Fragment(), FilterBottomSheetListener {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onDateClick(date: String) {
-        Log.e("TAG", "Selected Date $date")
-        when (date) {
 
+        eventList = SyncStatusHelper.getAllEnrolments()
+        var eventFilterList = mutableListOf<Enrollment>()
+        when (date) {
             "Today" -> {
                 val today = FormatterClass().getCurrentDate()
+                eventFilterList = generateRecordsBasedOnDates(today, eventList)
             }
 
-            "Yesterday" -> {}
-            "Tomorrow" -> {}
-            "This Week" -> {}
-            "Last Week" -> {}
-            "Next Week" -> {}
-            "This Month" -> {}
-            "Last Month" -> {}
-            "Next Month" -> {}
+            "Yesterday" -> {
+                val today = FormatterClass().getCurrentDateInstance()
+                val yesterday = Calendar.getInstance()
+                yesterday.time = today
+                yesterday.add(Calendar.DAY_OF_MONTH, -1)
+                // For example, print the dates for demonstration
+                val todayString =
+                    SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(yesterday.time)
+                eventFilterList = generateRecordsBasedOnDates(todayString, eventList)
+
+            }
+
+            "Tomorrow" -> {
+                val today = FormatterClass().getCurrentDateInstance()
+                val yesterday = Calendar.getInstance()
+                yesterday.time = today
+                yesterday.add(Calendar.DAY_OF_MONTH, 1)
+                // For example, print the dates for demonstration
+                val todayString =
+                    SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(yesterday.time)
+                eventFilterList = generateRecordsBasedOnDates(todayString, eventList)
+            }
+
+            "This Week" -> {
+                val today = FormatterClass().getCurrentDateInstance()
+                val startOfWeek = FormatterClass().getStartOfWeek(today)
+                val endOfWeek = FormatterClass().getEndOfWeek(today)
+                eventFilterList =
+                    generateRecordsBasedOnDateRange(startOfWeek, endOfWeek, eventList)
+
+            }
+
+            "Last Week" -> {
+                val currentDate = FormatterClass().getCurrentDateInstance()
+                val startOfLastWeek = FormatterClass().getStartOfLastWeek(currentDate)
+                val endOfLastWeek = FormatterClass().getEndOfLastWeek(currentDate)
+                eventFilterList =
+                    generateRecordsBasedOnDateRange(startOfLastWeek, endOfLastWeek, eventList)
+            }
+
+            "Next Week" -> {
+                val currentDate = FormatterClass().getCurrentDateInstance()
+                val startOfLastWeek = FormatterClass().getStartOfNextWeek(currentDate)
+                val endOfLastWeek = FormatterClass().getEndOfNextWeek(currentDate)
+                eventFilterList =
+                    generateRecordsBasedOnDateRange(startOfLastWeek, endOfLastWeek, eventList)
+            }
+
+            "This Month" -> {
+                val currentDate = FormatterClass().getCurrentDateInstance()
+                val startOfLastWeek = FormatterClass().getStartOfMonth(currentDate)
+                val endOfLastWeek = FormatterClass().getEndOfMonth(currentDate)
+                eventFilterList =
+                    generateRecordsBasedOnDateRange(startOfLastWeek, endOfLastWeek, eventList)
+            }
+
+            "Last Month" -> {
+                val currentDate = FormatterClass().getCurrentDateInstance()
+                val startOfLastWeek = FormatterClass().getStartOfLastMonth(currentDate)
+                val endOfLastWeek = FormatterClass().getEndOfLastMonth(currentDate)
+                eventFilterList =
+                    generateRecordsBasedOnDateRange(startOfLastWeek, endOfLastWeek, eventList)
+            }
+
+            "Next Month" -> {
+                val currentDate = FormatterClass().getCurrentDateInstance()
+                val startOfLastWeek = FormatterClass().getStartOfNextMonth(currentDate)
+                val endOfLastWeek = FormatterClass().getStartOfNextMonth(currentDate)
+                eventFilterList =
+                    generateRecordsBasedOnDateRange(startOfLastWeek, endOfLastWeek, eventList)
+            }
+
             "From To" -> {}
-            "Other" -> {}
-            "Anytime" -> {}
+            "Other" -> {
+                val dateOther = FormatterClass().getSharedPref("filter_date", requireContext())
+                if (dateOther!=null){
+                    eventFilterList = generateRecordsBasedOnDates(dateOther, eventList)
+                }
+            }
+
+            "Anytime" -> {
+                eventFilterList = eventList
+            }
+        }
+        if (eventFilterList.isNotEmpty()) {
+            tvNoCases.visibility = View.GONE
+        } else {
+            tvNoCases.visibility = View.VISIBLE
+        }
+        mRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            val eventAdapter =
+                EventAdapter(requireContext(), eventFilterList, this@EventsFragment::handleClick)
+            adapter = eventAdapter
+            eventAdapter.notifyDataSetChanged()
+
         }
 
     }
+
+    private fun generateRecordsBasedOnDateRange(
+        startOfWeek: Date,
+        endOfWeek: Date,
+        eventList: List<Enrollment>
+    ): MutableList<Enrollment> {
+        val eventFilterList = mutableListOf<Enrollment>()
+        eventList.forEach {
+            val dateFormat1 = SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.ENGLISH)
+
+            try {
+                // Convert the enrollmentDate string to a Date object
+                val enrollmentDate = dateFormat1.parse(it.enrollmentDate().toString())
+
+                // Check if the enrollmentDate is within the current week
+                if (enrollmentDate in startOfWeek..endOfWeek) {
+                    eventFilterList.add(it)
+                }
+            } catch (e: Exception) {
+                println("Error parsing date: ${e.message}")
+            }
+        }
+        return eventFilterList
+    }
+
+    private fun generateRecordsBasedOnDates(
+        today: String,
+        eventList: List<Enrollment>
+    ): MutableList<Enrollment> {
+        val eventFilterList = mutableListOf<Enrollment>()
+        eventList.forEach {
+
+            val dateFormat1 =
+                SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.ENGLISH)
+            val dateFormat2 = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+
+            try {
+                // Convert date strings to Date objects
+                val date1 = dateFormat1.parse(it.enrollmentDate().toString())
+                val date2 = dateFormat2.parse(today)
+
+                // Check if the dates are equal
+                if (date1 == date2) {
+                    println("Dates are equal!")
+                    eventFilterList.add(it)
+                } else {
+                    println("Dates are not equal.")
+                }
+            } catch (e: Exception) {
+                println("Error parsing date: ${e.message}")
+            }
+        }
+        return eventFilterList
+
+    }
+
 
     override fun onDateRangeClicked() {
 

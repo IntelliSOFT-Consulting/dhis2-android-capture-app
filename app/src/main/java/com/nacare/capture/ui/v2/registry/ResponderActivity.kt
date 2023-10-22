@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
+import android.text.Html
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
@@ -45,11 +46,16 @@ class ResponderActivity : AppCompatActivity() {
         progressBar = findViewById(R.id.progress_bar)
         progressTextView = findViewById(R.id.text_view_progress)
         val lnParent = findViewById<LinearLayout>(R.id.ln_parent)
+        Log.e("TAG", "Reached Responder Class...")
         findViewById<MaterialButton>(R.id.next_button).apply {
-            val name = FormatterClass().getSharedPref(
-                "section_name",
-                this@ResponderActivity
-            )
+            setOnClickListener {
+                this@ResponderActivity.finish()
+            }
+        }
+        findViewById<MaterialButton>(R.id.prev_button).apply {
+            setOnClickListener {
+                this@ResponderActivity.finish()
+            }
         }
         findViewById<TextView>(R.id.tv_title).apply {
             val name = FormatterClass().getSharedPref(
@@ -57,6 +63,19 @@ class ResponderActivity : AppCompatActivity() {
                 this@ResponderActivity
             )
             text = name
+        }
+        findViewById<TextView>(R.id.tv_title).apply {
+            val name = FormatterClass().getSharedPref(
+                "section_name",
+                this@ResponderActivity
+            )
+            val org = FormatterClass().getSharedPref(
+                "event_organization",
+                this@ResponderActivity
+            )
+            val formattedText = "Saving to <b>$name</b> in <b>$org</b>"
+            text = Html.fromHtml(formattedText, Html.FROM_HTML_MODE_LEGACY)
+
         }
         val section = FormatterClass().getSharedPref(
             "section_id",
@@ -94,7 +113,6 @@ class ResponderActivity : AppCompatActivity() {
             }
             val count = viewModel.getResponseList(enrollmentUid, programUid)
 
-            Log.e("TAG", "Total Attributes \nDone $count \nTotal $total")
             val percent = if (total != 0) {
                 (count.toDouble() / total.toDouble()) * 100
             } else {
@@ -653,6 +671,7 @@ class ResponderActivity : AppCompatActivity() {
                 dataValue = dataValue
             )
             viewModel.addResponse(this@ResponderActivity, data)
+            calculateProgress()
         }
     }
 

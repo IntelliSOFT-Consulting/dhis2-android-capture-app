@@ -1,16 +1,26 @@
 package com.nacare.capture.ui.v2.filters
 
+import android.app.DatePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
 import android.widget.GridLayout
 import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.TextView
 import com.example.android.androidskeletonapp.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener
 import com.nacare.capture.data.FormatterClass
+import com.nacare.capture.utils.AppUtils
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class FilterBottomSheetFragment : BottomSheetDialogFragment() {
     private var listener: FilterBottomSheetListener? = null
@@ -42,9 +52,50 @@ class FilterBottomSheetFragment : BottomSheetDialogFragment() {
                         }
                     }
                     selectedRadioText = childView.text.toString()
+                    when (selectedRadioText.toString()) {
+                        "Other" -> {
+                            val calendar = Calendar.getInstance()
+                            val year = calendar.get(Calendar.YEAR)
+                            val month = calendar.get(Calendar.MONTH)
+                            val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-                    listener?.onDateClick(selectedRadioText.toString())
-                    dismiss()
+                            val datePickerDialog =
+                                DatePickerDialog(
+                                    requireContext(),
+                                    { _: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+                                        val dateFormat =
+                                            SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                                        val selectedDate = dateFormat.format(
+                                            Date(
+                                                year - 1900,
+                                                monthOfYear,
+                                                dayOfMonth
+                                            )
+                                        )
+                                        Log.e("TAG", "Selected Other Date $selectedDate")
+                                        FormatterClass().saveSharedPref("filter_date", selectedDate, requireContext())
+                                        listener?.onDateClick(selectedRadioText.toString())
+                                        dismiss()
+                                    },
+                                    year,
+                                    month,
+                                    day
+                                )
+
+                            datePickerDialog.show()
+                        }
+
+                        "From To" -> {
+
+
+                        }
+
+                        else -> {
+                            listener?.onDateClick(selectedRadioText.toString())
+                            dismiss()
+                        }
+                    }
+
                 }
 
             }

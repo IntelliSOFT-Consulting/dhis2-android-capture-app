@@ -1,5 +1,6 @@
 package com.nacare.capture.ui.v2.registry
 
+import android.app.Application
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,6 +24,7 @@ import com.nacare.capture.ui.v2.facility.FacilityListActivity
 import com.nacare.capture.ui.v2.patients.PatientListActivity
 import com.nacare.capture.ui.v2.patients.PatientRegistrationActivity
 import com.nacare.capture.ui.v2.patients.PatientSearchActivity
+import com.nacare.capture.ui.v2.room.MainViewModel
 import org.hisp.dhis.android.core.event.EventCreateProjection
 import org.hisp.dhis.android.core.event.EventStatus
 import org.hisp.dhis.android.core.program.ProgramStageSection
@@ -32,11 +35,13 @@ class RegistryActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private lateinit var progressTextView: TextView
     private val dataList: MutableList<ProgramCategory> = mutableListOf()
+    private lateinit var viewModel: MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registry)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+        viewModel = MainViewModel((this.applicationContext as Application))
         progressBar = findViewById(R.id.progress_bar)
         progressTextView = findViewById(R.id.text_view_progress)
         findViewById<TextView>(R.id.tv_title).apply {
@@ -91,6 +96,10 @@ class RegistryActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+        loadEnrollmentData()
+    }
+
+    private fun loadEnrollmentData() {
         val program = FormatterClass().getSharedPref(PROGRAM_UUID, this@RegistryActivity)
         if (program != null) {
             val stageSections = SyncStatusHelper().getProgramStagesForProgram(program)
@@ -125,6 +134,11 @@ class RegistryActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        loadEnrollmentData()
+        super.onResume()
+    }
+
     private fun computeAndDisplayTotalScore(overallDone: Int, overallTotal: Int) {
 
         val percent = if (overallTotal != 0) {
@@ -153,20 +167,17 @@ class RegistryActivity : AppCompatActivity() {
     }
 
     private fun retrieveTotalDataElementValues(
-        program: String,
+        programUid: String,
         stage: List<ProgramStageSection>
     ): String {
         var done = 0
-        val enroll = FormatterClass().getSharedPref(
+        val enrollmentUid = FormatterClass().getSharedPref(
             "enrollment_id",
             this@RegistryActivity
         )
-        if (enroll != null) {
-            val singleEvent = SyncStatusHelper.getEventsPerEnrollment(program, enroll)
-            if (singleEvent != null) {
-                val attributes = SyncStatusHelper.getEventAttribute(singleEvent.uid())
-                Log.e("TAG", "Tracked Entity View Attributes $attributes")
-            }
+        if (enrollmentUid != null) {
+            done = viewModel.getResponseList(enrollmentUid, programUid)
+
         }
         overallDone += done
 
@@ -218,12 +229,13 @@ class RegistryActivity : AppCompatActivity() {
                 "event_organization",
                 this@RegistryActivity
             )
-
-
             if (date != null && org != null) {
-                SyncStatusHelper.createEvent()
+                Log.e("TAG", "Proceed to Responder Page.......")
                 startActivity(Intent(this@RegistryActivity, ResponderActivity::class.java))
             }
+        } else {
+            Toast.makeText(this@RegistryActivity, "Please Provide Patient Data", Toast.LENGTH_SHORT)
+                .show()
         }
     }
 

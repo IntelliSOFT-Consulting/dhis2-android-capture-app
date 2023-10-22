@@ -32,6 +32,8 @@ import org.hisp.dhis.android.core.trackedentity.TrackedEntityAttributeValue
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityDataValueObjectRepository
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityInstance
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityInstanceCreateProjection
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 class PatientRegistrationActivity : AppCompatActivity() {
@@ -109,9 +111,23 @@ class PatientRegistrationActivity : AppCompatActivity() {
                 val enrollmentUid = d2().enrollmentModule().enrollments()
                     .blockingAdd(enrollmentBuilder)
                 d2().enrollmentModule().enrollments().uid(enrollmentUid).apply {
-                    setEnrollmentDate(FormatterClass().parseEventDate(date))
-                    setFollowUp(false)
-                    setIncidentDate(FormatterClass().parseEventDate(date))
+                   try {
+                       val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+                       val dateInput = inputFormat.parse(date)
+                       // Define the desired output format
+                       val outputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
+                       // Format the date to the desired output format
+                       val formattedDateStr = outputFormat.format(dateInput)
+                       val formattedDate = outputFormat.parse(formattedDateStr)
+
+                       // Use the formatted date in your code
+                       println("Formatted Date: $formattedDate")
+                       setEnrollmentDate(formattedDate)
+                       setFollowUp(false)
+                       setIncidentDate(formattedDate)
+                   }catch (e:Exception){
+
+                   }
                     FormatterClass().saveSharedPref(
                         "enrollment_id",
                         enrollmentUid,
