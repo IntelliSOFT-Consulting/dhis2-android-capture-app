@@ -36,11 +36,26 @@ interface RoomDao {
         attributeUid: String,
         dataValue: String
     )
-
     @Query("SELECT dataValue FROM programDataValues WHERE enrollmentUid =:enrollmentUid AND programUid =:programUid AND attributeUid =:attributeUid ")
     fun getResponse(enrollmentUid: String, programUid: String, attributeUid: String): String?
+
     @Query("SELECT COUNT(*) FROM programDataValues WHERE enrollmentUid =:enrollmentUid AND programUid =:programUid ")
-    fun getResponseList(enrollmentUid: String, programUid: String):Int
+    fun getResponseList(enrollmentUid: String, programUid: String): Int
+
+    @Query("SELECT EXISTS (SELECT 1 FROM trackedEntityValues WHERE entityUid =:entityUid AND attributeUid =:attributeUid)")
+    fun checkTrackedEntity(entityUid: String, attributeUid: String): Boolean
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addTrackedEntity(data: TrackedEntityValues)
+    @Query("UPDATE  trackedEntityValues SET dataValue =:dataValue  WHERE entityUid =:entityUid   AND attributeUid =:attributeUid ")
+    fun updateTrackedEntity(entityUid: String, attributeUid: String, dataValue: String)
+
+    @Query("SELECT dataValue FROM trackedEntityValues WHERE entityUid =:entityUid AND attributeUid =:attributeUid ")
+    fun getRecordedResponse(entityUid: String, attributeUid: String): String?
+    @Query("SELECT COUNT(*) FROM trackedEntityValues WHERE entityUid =:entityUid ")
+    fun getTrackedAttributeResponses(entityUid: String): Int
+    @Query("DELETE FROM  trackedEntityValues WHERE entityUid =:entityUid AND attributeUid =:attributeUid")
+    fun deleteTrackedEntity(entityUid: String, attributeUid: String)
 
 
 }

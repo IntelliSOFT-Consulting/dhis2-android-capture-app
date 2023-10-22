@@ -57,4 +57,30 @@ class MainRepository(private val roomDao: RoomDao) {
         return roomDao.getResponseList(enrollmentUid, programUid)
     }
 
+    fun addUpdateTrackedEntity(data: TrackedEntityValues) {
+        val exists = roomDao.checkTrackedEntity(data.entityUid, data.attributeUid)
+        if (!exists) {
+            roomDao.addTrackedEntity(data)
+        } else {
+            roomDao.updateTrackedEntity(
+                data.entityUid,
+                data.attributeUid,
+                data.dataValue
+            )
+        }
+
+    }
+
+    fun getRecordedResponse(entityUid: String, attributeUid: String): String? {
+        return roomDao.getRecordedResponse(entityUid, attributeUid)
+    }
+
+    fun getTrackedAttributeResponses(entityUid: String): Int {
+        return roomDao.getTrackedAttributeResponses(entityUid)
+    }
+
+    fun deleteTrackedEntity(entityUid: String, attributeUid: String) {
+          roomDao.deleteTrackedEntity(entityUid, attributeUid)
+    }
+
 }

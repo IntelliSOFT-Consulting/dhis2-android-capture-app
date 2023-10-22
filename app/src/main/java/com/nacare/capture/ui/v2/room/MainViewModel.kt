@@ -37,4 +37,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         repository.getResponseList(enrollmentUid, programUid)
     }
 
+    fun addUpdateTrackedEntity(tracked: TrackedEntityValues) = runBlocking{
+        repository.addUpdateTrackedEntity(tracked)
+    }
+
+    fun getRecordedResponse(entityUid: String, attributeUid: String)= runBlocking{
+        repository.getRecordedResponse(entityUid,attributeUid)
+    }
+
+    fun getTrackedAttributeResponses(entityUid: String)= runBlocking {
+        repository.getTrackedAttributeResponses(entityUid)
+    }
+
+    fun deleteTrackedEntity(entityUid: String, attributeUid: String) = runBlocking{
+        repository.deleteTrackedEntity(entityUid,attributeUid)
+    }
+
+
 }

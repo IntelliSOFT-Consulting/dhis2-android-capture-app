@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.UUID
 
 class FormatterClass {
 
@@ -83,6 +84,7 @@ class FormatterClass {
         cal.set(Calendar.MILLISECOND, 999)
         return cal.time
     }
+
     fun getStartOfLastWeek(currentDate: Date): Date {
         val cal = Calendar.getInstance()
         cal.time = currentDate
@@ -106,6 +108,7 @@ class FormatterClass {
         cal.set(Calendar.MILLISECOND, 999)
         return cal.time
     }
+
     fun getStartOfNextWeek(currentDate: Date): Date {
         val cal = Calendar.getInstance()
         cal.time = currentDate
@@ -129,6 +132,7 @@ class FormatterClass {
         cal.set(Calendar.MILLISECOND, 999)
         return cal.time
     }
+
     fun getStartOfMonth(currentDate: Date): Date {
         val cal = Calendar.getInstance()
         cal.time = currentDate
@@ -150,6 +154,7 @@ class FormatterClass {
         cal.set(Calendar.MILLISECOND, 999)
         return cal.time
     }
+
     fun getStartOfLastMonth(currentDate: Date): Date {
         val cal = Calendar.getInstance()
         cal.time = currentDate
@@ -173,6 +178,7 @@ class FormatterClass {
         cal.set(Calendar.MILLISECOND, 999)
         return cal.time
     }
+
     fun getStartOfNextMonth(currentDate: Date): Date {
         val cal = Calendar.getInstance()
         cal.time = currentDate
@@ -197,4 +203,18 @@ class FormatterClass {
         return cal.time
     }
 
+    fun generateShortUuid(): String {
+        val uuid = UUID.randomUUID()
+        val mostSignificantBits = uuid.mostSignificantBits
+        val leastSignificantBits = uuid.leastSignificantBits
+
+        // Concatenate the most significant bits and least significant bits
+        val combinedBits = mostSignificantBits xor leastSignificantBits
+
+        // Convert the combined bits to a hexadecimal string
+        val hexString = java.lang.Long.toHexString(combinedBits)
+
+        // Take the first 8 characters of the hexadecimal string
+        return hexString.substring(0, 8)
+    }
 }

@@ -175,6 +175,7 @@ public class SyncStatusHelper {
                 .trackedEntityAttributes()
                 .withLegendSets()
                 .orderByCreated(ASC)
+                .orderByLastUpdated(ASC)
                 .get()
                 .blockingGet();
     }
@@ -184,7 +185,6 @@ public class SyncStatusHelper {
                 .trackedEntityInstanceQuery().get().blockingGet();
 
     }
-
 
 
     public List<ProgramStage> getProgramStagesForProgram(String programUid) {
@@ -214,8 +214,10 @@ public class SyncStatusHelper {
     }
 
     public List<Option> getDataElementOptions(String elementUid) {
-        return Sdk.d2().optionModule().options().byOptionSetUid()
-                .eq(elementUid)
+        return Sdk.d2().optionModule().options()
+                .byOptionSetUid().eq(elementUid)
+                .orderByCreated(ASC)
+                .orderByLastUpdated(ASC)
                 .get()
                 .blockingGet();
     }
@@ -284,6 +286,45 @@ public class SyncStatusHelper {
         return Sdk.d2().organisationUnitModule()
                 .organisationUnits()
                 .get().blockingGet();
+    }
+
+    public static List<OrganisationUnit> loadCounties() {
+        return Sdk.d2().organisationUnitModule()
+                .organisationUnits()
+                .byLevel().eq(2)
+                .orderByDisplayName(ASC)
+                .get()
+                .blockingGet();
+    }
+
+    public static OrganisationUnit loadResidence(Integer level, String countyUid) {
+        return Sdk.d2().organisationUnitModule()
+                .organisationUnits()
+                .byLevel().eq(level)
+                .byUid().eq(countyUid)
+                .orderByDisplayName(ASC)
+                .one()
+                .blockingGet();
+    }
+
+    public static List<OrganisationUnit> loadSubCounties(String county) {
+        return Sdk.d2().organisationUnitModule()
+                .organisationUnits()
+                .byLevel().eq(3)
+                .byParentUid().eq(county)
+                .orderByDisplayName(ASC)
+                .get()
+                .blockingGet();
+    }
+
+    public static List<OrganisationUnit> loadWards(String county) {
+        return Sdk.d2().organisationUnitModule()
+                .organisationUnits()
+                .byLevel().eq(4)
+                .byParentUid().eq(county)
+                .orderByDisplayName(ASC)
+                .get()
+                .blockingGet();
     }
 
     public static List<Event> getAllEventsWithTrackedEntities() {

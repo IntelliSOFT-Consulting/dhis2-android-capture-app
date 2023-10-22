@@ -64,7 +64,7 @@ class ResponderActivity : AppCompatActivity() {
             )
             text = name
         }
-        findViewById<TextView>(R.id.tv_title).apply {
+        findViewById<TextView>(R.id.textView).apply {
             val name = FormatterClass().getSharedPref(
                 "section_name",
                 this@ResponderActivity
@@ -73,7 +73,8 @@ class ResponderActivity : AppCompatActivity() {
                 "event_organization",
                 this@ResponderActivity
             )
-            val formattedText = "Saving to <b>$name</b> in <b>$org</b>"
+            val orgData = SyncStatusHelper().getOrganizationByUuid(org)
+            val formattedText = "Saving to <b>$name</b> in <b>${orgData.name()}</b>"
             text = Html.fromHtml(formattedText, Html.FROM_HTML_MODE_LEGACY)
 
         }
@@ -174,7 +175,8 @@ class ResponderActivity : AppCompatActivity() {
                         })
                     }
 
-                } else {
+                }
+                else {
                     val itemView = layoutInflater.inflate(
                         R.layout.item_autocomplete,
                         lnParent,
