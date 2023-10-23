@@ -170,6 +170,7 @@
                 android:layout_marginBottom="@dimen/_15dp"
                 android:background="?android:attr/selectableItemBackground"
                 android:elevation="@dimen/_20dp"
+                android:visibility="gone"
                 app:cardCornerRadius="@dimen/_5dp"
                 app:cardUseCompatPadding="true">
 

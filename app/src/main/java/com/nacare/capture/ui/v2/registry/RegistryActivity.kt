@@ -104,6 +104,17 @@ class RegistryActivity : AppCompatActivity() {
         if (program != null) {
             val stageSections = SyncStatusHelper().getProgramStagesForProgram(program)
             dataList.clear()
+            val patientDetails = ProgramCategory(
+                iconResId = null,
+                name = "Patient Details",
+                id = "patient-details",
+                done = getPatientDoneProgress(),
+                total = getPatientTotalProgress(),
+                elements = emptyList(),
+                altElements = emptyList(),
+                position = program
+            )
+            dataList.add(patientDetails)
             stageSections.forEach {
                 val stage = SyncStatusHelper().getProgramStageSections(it.uid())
                 val data = ProgramCategory(
@@ -175,6 +186,35 @@ class RegistryActivity : AppCompatActivity() {
 
     }
 
+    private fun getPatientDoneProgress(): String {
+        var done = 0
+
+        val enroll = FormatterClass().getSharedPref(
+            "enrollment_id",
+            this@RegistryActivity
+        )
+        val dataUser = SyncStatusHelper.getSingleEnrollment(enroll)
+        val user = SyncStatusHelper.getTrackedEntity(dataUser.trackedEntityInstance())
+        if (user != null) {
+            done = viewModel.getTrackedAttributeResponses(user.uid())
+        }
+        overallDone += done
+        return "$done"
+
+    }
+
+    private fun getPatientTotalProgress(): String {
+
+        var total = 0
+        val trackedEntity = SyncStatusHelper.trackedEntityAttributes()
+        trackedEntity.forEach {
+            total++
+        }
+        overallTotal += total
+        return "$total"
+
+    }
+
     private fun retrieveTotalDataElementValues(
         programUid: String,
         stage: List<ProgramStageSection>
@@ -221,69 +261,52 @@ class RegistryActivity : AppCompatActivity() {
             "enrollment_id",
             this@RegistryActivity
         )
-        if (enroll != null) {
-            FormatterClass().saveSharedPref(
-                "section_name", data.name,
-                this@RegistryActivity
-            )
-            FormatterClass().saveSharedPref(
-                "section_id", data.id,
-                this@RegistryActivity
-            )
-            val date = FormatterClass().getSharedPref(
-                "event_date",
-                this@RegistryActivity
-            )
-            val org = FormatterClass().getSharedPref(
-                "event_organization",
-                this@RegistryActivity
-            )
-            if (date != null && org != null) {
-                Log.e("TAG", "Proceed to Responder Page.......")
-                startActivity(Intent(this@RegistryActivity, ResponderActivity::class.java))
+        if (data.id == "patient-details") {
+
+            if (enroll != null) {
+                startActivity(
+                    Intent(
+                        this@RegistryActivity,
+                        PatientRegistrationActivity::class.java
+                    )
+                )
+            } else {
+                startActivity(Intent(this@RegistryActivity, PatientSearchActivity::class.java))
             }
         } else {
-            Toast.makeText(this@RegistryActivity, "Please Provide Patient Data", Toast.LENGTH_SHORT)
-                .show()
-        }
-    }
 
-    private fun handleClickOld(data: ProgramCategory) {
-        try {
-            val date = FormatterClass().getSharedPref(
-                "event_date",
-                this@RegistryActivity
-            )
-            val org = FormatterClass().getSharedPref(
-                "event_organization",
-                this@RegistryActivity
-            )
-            val enroll = FormatterClass().getSharedPref(
-                "enrollment_id",
-                this@RegistryActivity
-            )
-
-
-            if (date != null && org != null) {
-                val eventBuilder = EventCreateProjection.builder()
-                    .program(data.position)
-                    .organisationUnit(org)
-                    .programStage(data.id)
-                    .enrollment(date)
-                    .build()
-                // Create the empty event
-                val eventUid = Sdk.d2().eventModule().events()
-                    .blockingAdd(eventBuilder)
-                Sdk.d2().eventModule().events().uid(eventUid).apply {
-                    setStatus(EventStatus.ACTIVE)
-                    setEventDate(FormatterClass().parseEventDate(date))
-                    Log.e("TAG", "Event created with UID: $eventUid")
+            if (enroll != null) {
+                FormatterClass().saveSharedPref(
+                    "section_name", data.name,
+                    this@RegistryActivity
+                )
+                FormatterClass().saveSharedPref(
+                    "section_id", data.id,
+                    this@RegistryActivity
+                )
+                val date = FormatterClass().getSharedPref(
+                    "event_date",
+                    this@RegistryActivity
+                )
+                val org = FormatterClass().getSharedPref(
+                    "event_organization",
+                    this@RegistryActivity
+                )
+                if (date != null && org != null) {
+                    Log.e("TAG", "Proceed to Responder Page.......")
+                    startActivity(Intent(this@RegistryActivity, ResponderActivity::class.java))
                 }
+            } else {
+                Toast.makeText(
+                    this@RegistryActivity,
+                    "Please Provide Patient Data",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
             }
-        } catch (e: Exception) {
-            Log.e("TAG", "Program Click Exception ${e.message}")
         }
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {

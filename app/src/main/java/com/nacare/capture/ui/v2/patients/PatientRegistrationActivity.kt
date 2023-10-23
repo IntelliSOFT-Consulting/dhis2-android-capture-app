@@ -21,6 +21,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.androidskeletonapp.R
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.nacare.capture.adapters.OrganizationAdapter
@@ -71,6 +72,16 @@ class PatientRegistrationActivity : AppCompatActivity() {
         loadCurrentEnrollment(lnParent)
 
         loadCounties()
+        findViewById<MaterialButton>(R.id.prev_button).apply {
+            setOnClickListener {
+                this@PatientRegistrationActivity.finish()
+            }
+        }
+        findViewById<MaterialButton>(R.id.next_button).apply {
+            setOnClickListener {
+                this@PatientRegistrationActivity.finish()
+            }
+        }
     }
 
     private fun loadCounties() {

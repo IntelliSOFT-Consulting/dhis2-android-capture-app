@@ -32,18 +32,30 @@ class SummaryActivity : AppCompatActivity() {
         }
         loadEnrollmentData()
     }
+
     private fun loadEnrollmentData() {
         val program = FormatterClass().getSharedPref(Constants.PROGRAM_UUID, this@SummaryActivity)
         if (program != null) {
             val stageSections = SyncStatusHelper().getProgramStagesForProgram(program)
             dataList.clear()
+            val patientDetails = ProgramCategory(
+                iconResId = null,
+                name = "Patient Details",
+                id = "patient-details",
+                done = "0",
+                total = "0",
+                elements = emptyList(),
+                altElements = emptyList(),
+                position = program
+            )
+            dataList.add(patientDetails)
             stageSections.forEach {
                 val stage = SyncStatusHelper().getProgramStageSections(it.uid())
                 val data = ProgramCategory(
                     iconResId = null,
                     name = it.displayName().toString(),
                     id = it.uid(),
-                    done ="0",
+                    done = "0",
                     total = "0",
                     elements = emptyList(),
                     altElements = emptyList(),
@@ -67,6 +79,7 @@ class SummaryActivity : AppCompatActivity() {
 
         }
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
