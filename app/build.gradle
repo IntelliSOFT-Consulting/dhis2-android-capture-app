@@ -21,8 +21,8 @@ android {
         minSdkVersion 24
         //noinspection OldTargetApi
         targetSdkVersion 33
-        versionCode 1
-        versionName "1.0"
+        versionCode 209
+        versionName "2..00"
         testInstrumentationRunner "androidx.test.ext.junit.runners.AndroidJUnit4"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -55,8 +55,8 @@ android {
 
 ext {
     libraries = [
-            flipper         : "0.83.0",
-            soloader        : "0.10.1"
+            flipper         : "0.161.0",
+            soloader        : "0.10.4"
     ]
 }
 

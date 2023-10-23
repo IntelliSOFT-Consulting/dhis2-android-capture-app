@@ -4,7 +4,7 @@
     android:id="@+id/materialCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/_15dp"
+    android:layout_marginTop="@dimen/_5dp"
     android:background="?android:attr/selectableItemBackground"
     android:elevation="@dimen/_20dp"
     app:cardCornerRadius="@dimen/_5dp"

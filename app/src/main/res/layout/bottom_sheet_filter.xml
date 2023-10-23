@@ -124,11 +124,11 @@
                 android:text="Next Month" />
 
 
-            <RadioButton
+         <!--   <RadioButton
                 android:id="@+id/fromTo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="From To" />
+                android:text="From To" />-->
 
             <RadioButton
                 android:id="@+id/other"

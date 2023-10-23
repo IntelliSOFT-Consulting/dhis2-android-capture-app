@@ -1,6 +1,7 @@
 package com.nacare.capture.ui.v2.registry
 
 import android.app.Application
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -46,9 +47,16 @@ class ResponderActivity : AppCompatActivity() {
         progressBar = findViewById(R.id.progress_bar)
         progressTextView = findViewById(R.id.text_view_progress)
         val lnParent = findViewById<LinearLayout>(R.id.ln_parent)
-        Log.e("TAG", "Reached Responder Class...")
+
         findViewById<MaterialButton>(R.id.next_button).apply {
             setOnClickListener {
+                val programUid = FormatterClass().getSharedPref(
+                    "section_id",
+                    this@ResponderActivity
+                )
+                if (programUid!=null && programUid=="egENXDqflEt"){
+                    startActivity(Intent(this@ResponderActivity,SummaryActivity::class.java))
+                }
                 this@ResponderActivity.finish()
             }
         }

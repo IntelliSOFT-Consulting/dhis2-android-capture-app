@@ -44,4 +44,5 @@
     <string name="select_organization">Select Organization</string>
     <string name="next">Next</string>
     <string name="organization_unit">Organization Unit</string>
+    <string name="save_exit"><![CDATA[Save & Exit]]></string>
 </resources>
